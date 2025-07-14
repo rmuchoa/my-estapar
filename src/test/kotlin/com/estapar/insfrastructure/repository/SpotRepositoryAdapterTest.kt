@@ -2,6 +2,7 @@ package com.estapar.insfrastructure.repository
 
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.spot.Spot
+import com.estapar.infrastructure.repository.SectorRepositoryAdapter
 import com.estapar.infrastructure.repository.SpotRepositoryAdapter
 import com.estapar.infrastructure.repository.postgresql.GarageSpotEntity
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSpotRepository
@@ -30,12 +31,13 @@ import java.time.LocalTime
 class SpotRepositoryAdapterTest {
 
     @Mock private lateinit var repository: JPAGarageSpotRepository
+    @Mock private lateinit var sectorRepository: SectorRepositoryAdapter
     private val spotCaptor = argumentCaptor<GarageSpotEntity>()
     private lateinit var adapter: SpotRepositoryAdapter
 
     @BeforeEach
     fun setUp() {
-        adapter = SpotRepositoryAdapter(repository)
+        adapter = SpotRepositoryAdapter(repository, sectorRepository)
     }
 
     @Test

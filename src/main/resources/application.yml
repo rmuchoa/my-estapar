@@ -1,3 +1,19 @@
 spring:
-    application:
-        name: "estapar"
+    r2dbc:
+        url: "r2dbc:postgresql://localhost:5432/estapar"
+        username: "postgres"
+        password: "postgres"
+    sql:
+        init:
+            mode: always
+
+jackson:
+    serialization:
+        indent_output: true
+
+client:
+    garage:
+        base-url: "http://localhost:3000"
+
+server:
+    port: 3003

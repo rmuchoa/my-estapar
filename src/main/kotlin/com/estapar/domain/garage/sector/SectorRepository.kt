@@ -4,4 +4,5 @@ import reactor.core.publisher.Mono
 
 interface SectorRepository {
     fun save(sector: Sector): Mono<Sector>
+    fun findById(id: Long): Mono<Sector>
 }
