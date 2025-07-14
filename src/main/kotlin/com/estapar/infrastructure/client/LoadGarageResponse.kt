@@ -19,10 +19,8 @@ data class LoadGarageResponse(
                                 sector.name.equals(other = name, ignoreCase = true)
                             }
                         }
-                    }
-                )
+                    })
             }
-
     }
 
 }

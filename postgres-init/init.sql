@@ -19,3 +19,9 @@ CREATE TABLE IF NOT EXISTS garage_spot (
         REFERENCES garage_sector(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS car_entry (
+    id SERIAL PRIMARY KEY,
+    license_plate TEXT NOT NULL,
+    entry_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

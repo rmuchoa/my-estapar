@@ -4,11 +4,11 @@ import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.sector.SectorRepository
 import com.estapar.infrastructure.repository.postgresql.GarageSectorEntity
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSectorRepository
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-@Service
+@Repository
 class SectorRepositoryAdapter(
     private val repository: JPAGarageSectorRepository
 ) : SectorRepository {

@@ -21,8 +21,7 @@ data class GarageSpotEntity(
             sector = sector,
             latitude = latitude,
             longitude = longitude,
-            occupied = occupied
-        )
+            occupied = occupied)
 
     companion object {
         fun of(spot: Spot): GarageSpotEntity =
@@ -30,7 +29,6 @@ data class GarageSpotEntity(
                 sectorId = spot.sector?.id,
                 latitude = spot.latitude,
                 longitude = spot.longitude,
-                occupied = spot.occupied
-            )
+                occupied = spot.occupied)
     }
 }
