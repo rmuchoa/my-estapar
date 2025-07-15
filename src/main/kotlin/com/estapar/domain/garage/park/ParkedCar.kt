@@ -10,7 +10,10 @@ data class ParkedCar(
     val spot: Spot,
     val carEntry: CarEntry,
     val licensePlate: String,
-    val parkingTime: LocalDateTime = now()) {
+    val parkingTime: LocalDateTime = now()
+) {
+
+    var priceRule: DynamicPriceRule = spot.definePriceRuleByCapacity()
 
     fun isSpotStillOccupied() =
         spot.isStillOccupied()

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS parked_car (
     license_plate TEXT NOT NULL,
     parking_time TIMESTAMP NOT NULL,
     car_entry_id INTEGER NOT NULL,
+    price_level_rate INTEGER NOT NULL,
     spot_id INTEGER NOT NULL,
     CONSTRAINT fk_car_entry
         FOREIGN KEY (car_entry_id)

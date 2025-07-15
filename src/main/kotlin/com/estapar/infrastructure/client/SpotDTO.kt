@@ -13,7 +13,6 @@ data class SpotDTO(
 ) {
     fun toDomain(sectorFillOperation: (String) -> Sector?): Spot {
         return Spot(
-            id = id,
             sector = sectorFillOperation(sector),
             latitude = latitude,
             longitude = longitude,

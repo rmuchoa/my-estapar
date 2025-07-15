@@ -15,5 +15,11 @@ client:
     garage:
         base-url: "http://localhost:3000"
 
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,env
+
 server:
     port: 3003

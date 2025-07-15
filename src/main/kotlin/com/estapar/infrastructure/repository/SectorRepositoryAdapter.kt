@@ -16,7 +16,7 @@ class SectorRepositoryAdapter(
 
     override fun save(sector: Sector): Mono<Sector> =
         repository.save<GarageSectorEntity>(GarageSectorEntity.of(sector))
-            .flatMap { entity -> fillSpots(entity) }
+            .map { entity -> entity.toDomain() }
 
     override fun findById(id: Long): Mono<Sector> =
         repository.findById(id)

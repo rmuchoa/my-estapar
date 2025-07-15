@@ -1,5 +1,6 @@
 package com.estapar.domain.garage.spot
 
+import com.estapar.domain.garage.park.DynamicPriceRule
 import com.estapar.domain.garage.sector.Sector
 import java.time.LocalTime
 import kotlin.time.Duration
@@ -22,5 +23,8 @@ data class Spot(
 
     fun hasOvercapacityAlert(): Boolean =
         sector?.hasOverCapacityAlert()?: false
+
+    fun definePriceRuleByCapacity(): DynamicPriceRule =
+        sector?.definePriceRuleByCapacity()?: DynamicPriceRule.TWENTY_FIVE_PERCENT_CAPACITY
 
 }

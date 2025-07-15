@@ -15,6 +15,7 @@ data class ParkedCarEntity(
     @Column("car_entry_id") val carEntryId: Long,
     @Column("license_plate") val licensePlate: String,
     @Column("parking_time") val parkingTime: LocalDateTime,
+    @Column("price_level_rate") val priceLevelRate: Int,
 ) {
 
     fun toDomain(
@@ -34,6 +35,7 @@ data class ParkedCarEntity(
                 spotId = parkedCar.spot.id!!,
                 carEntryId = parkedCar.carEntry.id!!,
                 licensePlate = parkedCar.licensePlate,
-                parkingTime = parkedCar.parkingTime)
+                parkingTime = parkedCar.parkingTime,
+                priceLevelRate = parkedCar.priceRule.priceRate)
     }
 }
