@@ -3,15 +3,15 @@ package com.estapar.infrastructure.repository
 import com.estapar.domain.garage.spot.Spot
 import com.estapar.domain.garage.spot.SpotRepository
 import com.estapar.infrastructure.repository.postgresql.GarageSpotEntity
+import com.estapar.infrastructure.repository.postgresql.JPAGarageSectorRepository
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSpotRepository
-import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
+import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 
-@Service
+@Repository
 class SpotRepositoryAdapter(
     private val repository: JPAGarageSpotRepository,
-    private val sectorRepository: SectorRepositoryAdapter
+    private val sectorRepository: JPAGarageSectorRepository
 ) : SpotRepository {
 
     override fun save(spot: Spot): Mono<Spot> =
@@ -22,15 +22,15 @@ class SpotRepositoryAdapter(
         repository.findById(id)
             .flatMap { entity -> fillSector(entity) }
 
-    fun buscarTodos(): Flux<Spot> =
-        repository.findAll()
+    override fun findByGeoposition(latitude: Double, longitude: Double): Mono<Spot> =
+        repository.findByLatitudeAndLongitude(latitude, longitude)
             .flatMap { entity -> fillSector(entity) }
 
     private fun fillSector(entity: GarageSpotEntity): Mono<Spot> {
         return entity.sectorId?.let { sectorId ->
             sectorRepository.findById(sectorId)
-                .map { sector ->
-                    entity.toDomain(sector)
+                .map { sectorEntity ->
+                    entity.toDomain(sector = sectorEntity.toDomain())
                 }
         }?: Mono.empty()
     }

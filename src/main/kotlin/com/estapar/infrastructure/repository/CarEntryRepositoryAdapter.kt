@@ -16,4 +16,8 @@ class CarEntryRepositoryAdapter(
         repository.save<CarEntryEntity>(CarEntryEntity.of(carEntry))
             .map { entity -> entity.toDomain() }
 
+    override fun findByLicensePlate(licensePlate: String): Mono<CarEntry> =
+        repository.findByLicensePlate(licensePlate)
+            .map { entity -> entity.toDomain() }
+
 }

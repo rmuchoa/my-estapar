@@ -2,4 +2,4 @@ package com.estapar.infrastructure.repository.postgresql
 
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 
-interface JPAGarageSectorRepository : ReactiveCrudRepository<GarageSectorEntity, Long>
+interface JPAParkedCarRepository : ReactiveCrudRepository<ParkedCarEntity, Long>

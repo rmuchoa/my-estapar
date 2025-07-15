@@ -31,6 +31,7 @@ data class GarageSectorEntity(
     companion object {
         fun of(sector: Sector): GarageSectorEntity =
             GarageSectorEntity(
+                id = sector.id,
                 name = sector.name,
                 basePrice = sector.basePrice,
                 maxCapacity = sector.maxCapacity,

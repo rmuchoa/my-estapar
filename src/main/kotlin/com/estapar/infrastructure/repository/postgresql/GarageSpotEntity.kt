@@ -15,7 +15,7 @@ data class GarageSpotEntity(
     @Column("occupied") val occupied: Boolean
 ) {
 
-    fun toDomain(sector: Sector?): Spot =
+    fun toDomain(sector: Sector? = null): Spot =
         Spot(
             id = id,
             sector = sector,
@@ -26,6 +26,7 @@ data class GarageSpotEntity(
     companion object {
         fun of(spot: Spot): GarageSpotEntity =
             GarageSpotEntity(
+                id = spot.id,
                 sectorId = spot.sector?.id,
                 latitude = spot.latitude,
                 longitude = spot.longitude,

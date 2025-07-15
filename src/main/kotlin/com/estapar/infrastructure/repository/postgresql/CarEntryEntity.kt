@@ -9,20 +9,22 @@ import java.time.LocalDateTime
 @Table(name = "car_entry")
 data class CarEntryEntity(
     @Id @Column("id") val id: Long? = null,
-    @Column("license_plate") val licensePlate: String,
-    @Column("entry_time") val entryTime: LocalDateTime
+    @Column("entry_time") val entryTime: LocalDateTime,
+    @Column("license_plate") val licensePlate: String
 ) {
 
     fun toDomain(): CarEntry =
         CarEntry(
-            licensePlate = licensePlate,
-            entryTime = entryTime)
+            id = id,
+            entryTime = entryTime,
+            licensePlate = licensePlate)
 
     companion object {
         fun of(carEntry: CarEntry): CarEntryEntity =
             CarEntryEntity(
-                licensePlate = carEntry.licensePlate,
-                entryTime = carEntry.entryTime)
+                id = carEntry.id,
+                entryTime = carEntry.entryTime,
+                licensePlate = carEntry.licensePlate)
     }
 
 }
