@@ -2,9 +2,9 @@ package com.estapar.insfrastructure.repository
 
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.spot.Spot
-import com.estapar.infrastructure.repository.SectorRepositoryAdapter
 import com.estapar.infrastructure.repository.SpotRepositoryAdapter
-import com.estapar.infrastructure.repository.postgresql.GarageSpotEntity
+import com.estapar.infrastructure.repository.postgresql.entity.GarageSpotEntity
+import com.estapar.infrastructure.repository.postgresql.JPAGarageSectorRepository
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSpotRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
@@ -31,7 +31,7 @@ import java.time.LocalTime
 class SpotRepositoryAdapterTest {
 
     @Mock private lateinit var repository: JPAGarageSpotRepository
-    @Mock private lateinit var sectorRepository: SectorRepositoryAdapter
+    @Mock private lateinit var sectorRepository: JPAGarageSectorRepository
     private val spotCaptor = argumentCaptor<GarageSpotEntity>()
     private lateinit var adapter: SpotRepositoryAdapter
 
@@ -77,7 +77,6 @@ class SpotRepositoryAdapterTest {
             openHour = openHour,
             closeHour = closeHour)
         val spot = Spot(
-            id = 2,
             sector = sector,
             latitude = 39.22,
             longitude = 45.23,

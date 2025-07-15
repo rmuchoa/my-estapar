@@ -2,7 +2,7 @@ package com.estapar.infrastructure.repository
 
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.sector.SectorRepository
-import com.estapar.infrastructure.repository.postgresql.GarageSectorEntity
+import com.estapar.infrastructure.repository.postgresql.entity.GarageSectorEntity
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSectorRepository
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSpotRepository
 import org.springframework.stereotype.Repository

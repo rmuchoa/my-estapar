@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.repository.postgresql
+package com.estapar.infrastructure.repository.postgresql.entity
 
 import com.estapar.domain.garage.carEntry.CarEntry
 import org.springframework.data.annotation.Id

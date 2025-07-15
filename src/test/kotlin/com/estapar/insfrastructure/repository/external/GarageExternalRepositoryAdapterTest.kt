@@ -54,7 +54,7 @@ class GarageExternalRepositoryAdapterTest {
         val openHour = LocalTime.of(9, 10)
         val closeHour = LocalTime.of(15, 45)
         val sector = GarageSectorDTO(sector = "A", basePrice = BigDecimal.valueOf(30.24), maxCapacity = 100, openHour, closeHour, durationLimitMinutes = 20)
-        val spot = SpotDTO(id = 1, sector = "A", lat = 20.34, lng = 45.29, occupied = true)
+        val spot = SpotDTO(id = 1, sector = "A", latitude = 20.34, longitude = 45.29, occupied = true)
         val garage = LoadGarageResponse(garage = listOf(sector), spots = listOf(spot))
         `when`(webClient.getFirstGarageLoad()).thenReturn(Mono.just(garage))
 
@@ -82,8 +82,8 @@ class GarageExternalRepositoryAdapterTest {
                             instanceOf(Spot::class.java),
                             hasProperty("id", equalTo(spot.id)),
                             hasProperty("sector", instanceOf<Sector>(Sector::class.java)),
-                            hasProperty("latitude", equalTo(spot.lat)),
-                            hasProperty("longitude", equalTo(spot.lng)),
+                            hasProperty("latitude", equalTo(spot.latitude)),
+                            hasProperty("longitude", equalTo(spot.longitude)),
                             hasProperty("occupied", equalTo(spot.occupied))
                         ))
                     ))

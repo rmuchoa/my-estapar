@@ -2,7 +2,7 @@ package com.estapar.infrastructure.repository
 
 import com.estapar.domain.garage.carEntry.CarEntry
 import com.estapar.domain.garage.carEntry.CarEntryRepository
-import com.estapar.infrastructure.repository.postgresql.CarEntryEntity
+import com.estapar.infrastructure.repository.postgresql.entity.CarEntryEntity
 import com.estapar.infrastructure.repository.postgresql.JPACarEntryRepository
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
