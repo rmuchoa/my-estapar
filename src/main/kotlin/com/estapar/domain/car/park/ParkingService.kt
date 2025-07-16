@@ -15,7 +15,7 @@ open class ParkingService(
 ) {
 
     fun findBy(licensePlate: String): Mono<Parking> =
-        repository.findByLicensePlate(licensePlate)
+        repository.findEnteredByLicensePlate(licensePlate)
 
     fun parkCarOnSpot(parking: Parking): Mono<Parking> =
         validParking(parking)
@@ -24,7 +24,10 @@ open class ParkingService(
             .flatMap { saved -> checkSectorCapacityToClose(parking = saved) }
 
     fun unparkCarFromSpot(parking: Parking): Mono<Parking> =
-        repository.save(parking = parking.copy(unparkingTime = LocalDateTime.now()))
+        repository.save(
+            parking = parking.copy(
+                unparkingTime = LocalDateTime.now(),
+                status = ParkingStatus.LEAVED))
             .flatMap { saved -> markSpotAsFree(parking = saved) }
             .flatMap { saved -> checkSectorCapacityToReopen(parking = saved) }
 

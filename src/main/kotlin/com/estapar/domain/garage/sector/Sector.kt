@@ -4,7 +4,11 @@ import com.estapar.domain.car.park.DynamicPriceRule
 import com.estapar.domain.garage.spot.Spot
 import java.math.BigDecimal
 import java.time.LocalTime
+import kotlin.math.ceil
 import kotlin.time.Duration
+
+const val ONE_HOUR_MINUTES = 60
+const val A_QUARTER_OF_AN_HOUR = 15.0
 
 data class Sector(
     val id: Long? = null,
@@ -41,5 +45,20 @@ data class Sector(
 
     private fun getOccupiedSpotsNumberPlusOne(): Double =
         getAllOccupiedSpots().size.toDouble() + 1.0
+
+    fun generateChargeFor(billingDuration: Duration, priceRule: DynamicPriceRule): BigDecimal {
+        return when (billingDuration.inWholeMinutes) {
+            in 0..15 -> BigDecimal.ZERO
+            in 15..60 -> basePrice
+            else -> {
+                val fourParts = BigDecimal.valueOf( 4.0)
+                val discountedPricePerHour = priceRule.applyPriceRatePercentageOn(basePrice)
+                val discountedPricePer15Minutes = discountedPricePerHour.divide(fourParts)
+                val excessMinutes = billingDuration.inWholeMinutes - ONE_HOUR_MINUTES
+                val numberBlocksOf15Minutes = ceil(excessMinutes / A_QUARTER_OF_AN_HOUR)
+                basePrice + (discountedPricePer15Minutes * numberBlocksOf15Minutes.toBigDecimal())
+            }
+        }
+    }
 
 }

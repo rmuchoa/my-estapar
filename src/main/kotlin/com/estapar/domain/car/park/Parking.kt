@@ -1,8 +1,10 @@
 package com.estapar.domain.car.park
 
 import com.estapar.domain.garage.spot.Spot
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
+import kotlin.time.Duration
 
 data class Parking(
     val id: Long? = null,
@@ -10,9 +12,9 @@ data class Parking(
     val licensePlate: String,
     val parkingTime: LocalDateTime = now(),
     val unparkingTime: LocalDateTime? = null,
+    val priceRule: DynamicPriceRule = spot.definePriceRuleByCapacity(),
+    val status: ParkingStatus = ParkingStatus.ENTERED
 ) {
-
-    var priceRule: DynamicPriceRule = spot.definePriceRuleByCapacity()
 
     fun isSpotStillOccupied() =
         spot.isStillOccupied()
@@ -22,6 +24,9 @@ data class Parking(
 
     fun hasReachedSectorMaxCapacity(): Boolean =
         spot.hasReachedSectorMaxCapacity()
+
+    fun generateChargeFor(billingDuration: Duration): BigDecimal =
+        spot.generateChargeFor(billingDuration, priceRule)
 
     companion object {
         fun of(parkAttempt: ParkAttempt, spot: Spot): Parking =
