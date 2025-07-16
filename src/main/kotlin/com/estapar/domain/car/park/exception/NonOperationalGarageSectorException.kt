@@ -1,4 +1,4 @@
-package com.estapar.domain.park.exception
+package com.estapar.domain.car.park.exception
 
 class NonOperationalGarageSectorException(
     message: String

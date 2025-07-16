@@ -1,8 +1,8 @@
-package com.estapar.domain.park
+package com.estapar.domain.car.park
 
-import com.estapar.domain.park.exception.NonOperationalGarageSectorException
-import com.estapar.domain.park.exception.OverfilledOccupancyGarageSectorException
-import com.estapar.domain.park.exception.UnavailableParkingSpotException
+import com.estapar.domain.car.park.exception.NonOperationalGarageSectorException
+import com.estapar.domain.car.park.exception.OverfilledOccupancyGarageSectorException
+import com.estapar.domain.car.park.exception.UnavailableParkingSpotException
 import com.estapar.domain.garage.sector.SectorService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono

@@ -1,6 +1,6 @@
-package com.estapar.domain.park
+package com.estapar.domain.car.park
 
-import com.estapar.domain.carEntry.CarEntryService
+import com.estapar.domain.car.entry.CarEntryService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono
 

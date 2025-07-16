@@ -1,7 +1,7 @@
 package com.estapar.infrastructure.repository
 
-import com.estapar.domain.park.ParkedCar
-import com.estapar.domain.park.ParkedCarRepository
+import com.estapar.domain.car.park.ParkedCar
+import com.estapar.domain.car.park.ParkedCarRepository
 import com.estapar.infrastructure.repository.postgresql.JPAParkedCarRepository
 import com.estapar.infrastructure.repository.postgresql.entity.ParkedCarEntity
 import org.springframework.stereotype.Repository

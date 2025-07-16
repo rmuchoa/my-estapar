@@ -1,4 +1,4 @@
-package com.estapar.domain.park
+package com.estapar.domain.car.park
 
 data class ParkAttempt(
     val latitude: Double,

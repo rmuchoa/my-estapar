@@ -1,4 +1,4 @@
-package com.estapar.domain.park
+package com.estapar.domain.car.park
 
 enum class DynamicPriceRule(val priceRate: Int) {
 

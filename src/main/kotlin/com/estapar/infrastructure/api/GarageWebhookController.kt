@@ -1,7 +1,7 @@
 package com.estapar.infrastructure.api
 
-import com.estapar.domain.carEntry.CarEntryService
-import com.estapar.domain.park.ParkAttemptService
+import com.estapar.domain.car.entry.CarEntryService
+import com.estapar.domain.car.park.ParkAttemptService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
