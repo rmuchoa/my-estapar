@@ -14,4 +14,7 @@ open class SectorService(
     fun closeSectorOperation(sector: Sector): Mono<Sector> =
         repository.save(sector = sector.copy(status = SectorStatus.CLOSED))
 
+    fun reopenSectorOperation(sector: Sector): Mono<Sector> =
+        repository.save(sector = sector.copy(status = SectorStatus.OPENED))
+
 }

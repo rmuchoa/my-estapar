@@ -21,23 +21,21 @@ CREATE TABLE IF NOT EXISTS garage_spot (
         ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS car_entry (
+CREATE TABLE IF NOT EXISTS garage_logging (
     id SERIAL PRIMARY KEY,
     license_plate TEXT NOT NULL,
-    entry_time TIMESTAMP NOT NULL
+    entry_time TIMESTAMP NOT NULL,
+    exit_time TIMESTAMP NULL,
+    status TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS parked_car (
+CREATE TABLE IF NOT EXISTS garage_parking (
     id SERIAL PRIMARY KEY,
     spot_id INTEGER NOT NULL,
-    car_entry_id INTEGER NOT NULL,
     license_plate TEXT NOT NULL,
-    parking_time TIMESTAMP NOT NULL,
     price_level_rate INTEGER NOT NULL,
-    CONSTRAINT fk_car_entry
-        FOREIGN KEY (car_entry_id)
-        REFERENCES car_entry(id)
-        ON DELETE CASCADE,
+    parking_time TIMESTAMP NOT NULL,
+    unparking_time TIMESTAMP NULL,
     CONSTRAINT fk_garage_spot
         FOREIGN KEY (spot_id)
         REFERENCES garage_spot(id)

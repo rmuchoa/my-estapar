@@ -1,16 +1,15 @@
 package com.estapar.domain.car.park
 
-import com.estapar.domain.car.entry.CarEntry
 import com.estapar.domain.garage.spot.Spot
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
-data class ParkedCar(
+data class Parking(
     val id: Long? = null,
     val spot: Spot,
-    val carEntry: CarEntry,
     val licensePlate: String,
-    val parkingTime: LocalDateTime = now()
+    val parkingTime: LocalDateTime = now(),
+    val unparkingTime: LocalDateTime? = null,
 ) {
 
     var priceRule: DynamicPriceRule = spot.definePriceRuleByCapacity()
@@ -21,14 +20,13 @@ data class ParkedCar(
     fun isOutsideOpeningHours() =
         spot.isSectorClosedFor(parkingTime = parkingTime.toLocalTime())
 
-    fun hasOvercapacityAlert(): Boolean =
+    fun hasReachedSectorMaxCapacity(): Boolean =
         spot.hasReachedSectorMaxCapacity()
 
     companion object {
-        fun of(parkAttempt: ParkAttempt, carEntry: CarEntry, spot: Spot): ParkedCar =
-            ParkedCar(
+        fun of(parkAttempt: ParkAttempt, spot: Spot): Parking =
+            Parking(
                 spot = spot,
-                carEntry = carEntry,
                 licensePlate = parkAttempt.licensePlate)
     }
 

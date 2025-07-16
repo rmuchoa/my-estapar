@@ -1,6 +1,7 @@
 package com.estapar.infrastructure.api
 
 import com.estapar.domain.car.entry.CarEntryService
+import com.estapar.domain.car.exit.CarExitService
 import com.estapar.domain.car.park.ParkAttemptService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,7 +14,8 @@ import reactor.core.publisher.Mono
 @RequestMapping("/webhook")
 class GarageWebhookController(
     val carEntryService: CarEntryService,
-    val parkAttemptService: ParkAttemptService
+    val parkAttemptService: ParkAttemptService,
+    val carExitService: CarExitService
 ) {
 
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -31,7 +33,7 @@ class GarageWebhookController(
         Mono.just(entryEvent)
             .doOnNext { event -> log.info("Entrada: ${event.licensePlate} at ${event.entryTime}") }
             .map { event -> event.toDomain() }
-            .flatMap { carEntry -> carEntryService.recordEntry(carEntry) }
+            .flatMap { carEntry -> carEntryService.logEntry(carEntry) }
 
     fun receiveParkedEvent(parkedEvent: GarageParkedEvent) =
         Mono.just(parkedEvent)
@@ -42,5 +44,7 @@ class GarageWebhookController(
     fun receiveExitEvent(exitEvent: GarageExitEvent) =
         Mono.just(exitEvent)
             .doOnNext { event -> log.info("Entrada: ${event.licensePlate} at ${event.exitTime}") }
+            .map { event -> event.toDomain() }
+            .flatMap { carExit -> carExitService.logExit(carExit) }
 
 }

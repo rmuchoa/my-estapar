@@ -1,19 +1,21 @@
 package com.estapar.domain.car.entry
 
+import com.estapar.domain.car.logging.AlreadyHasActiveGarageLoggingException
+import com.estapar.domain.car.logging.GarageLoggingService
 import reactor.core.publisher.Mono
 
 open class CarEntryService(
-    val repository: CarEntryRepository
+    val garageLoggingService: GarageLoggingService
 ) {
 
-    fun recordEntry(carEntry: CarEntry): Mono<CarEntry> =
-        repository.save(carEntry)
-
-    fun findCarEntryBy(licensePlate: String): Mono<CarEntry> =
-        repository.findByLicensePlate(licensePlate)
-            .switchIfEmpty(Mono.error {
-                NotFoundCarEntryException(
-                    message = "No one car entry was found for license plate: '$licensePlate'")
-            })
+    fun logEntry(carEntry: CarEntry): Mono<Void> =
+        garageLoggingService.findActiveGarageLoggingBy(licensePlate = carEntry.licensePlate)
+            .flatMap { logging ->
+                Mono.error<Void>(
+                    AlreadyHasActiveGarageLoggingException(
+                        message = "License plate '${carEntry.licensePlate}' has already logged in garage recently!"))
+            }
+            .switchIfEmpty(garageLoggingService.logEntry(carEntry)
+                .then())
 
 }
