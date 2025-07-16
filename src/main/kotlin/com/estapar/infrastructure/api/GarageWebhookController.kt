@@ -31,7 +31,7 @@ class GarageWebhookController(
         Mono.just(entryEvent)
             .doOnNext { event -> log.info("Entrada: ${event.licensePlate} at ${event.entryTime}") }
             .map { event -> event.toDomain() }
-            .flatMap { carEntry -> carEntryService.recordEntry(carEntry) }
+            .flatMap { carEntry -> carEntryService.logEntry(carEntry) }
 
     fun receiveParkedEvent(parkedEvent: GarageParkedEvent) =
         Mono.just(parkedEvent)

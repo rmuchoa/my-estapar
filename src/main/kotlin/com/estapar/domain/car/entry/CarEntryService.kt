@@ -1,19 +1,15 @@
 package com.estapar.domain.car.entry
 
+import com.estapar.domain.car.logging.GarageLogging
+import com.estapar.domain.car.logging.GarageLoggingService
 import reactor.core.publisher.Mono
 
 open class CarEntryService(
-    val repository: CarEntryRepository
+    val garageLoggingService: GarageLoggingService
 ) {
 
-    fun recordEntry(carEntry: CarEntry): Mono<CarEntry> =
-        repository.save(carEntry)
-
-    fun findCarEntryBy(licensePlate: String): Mono<CarEntry> =
-        repository.findByLicensePlate(licensePlate)
-            .switchIfEmpty(Mono.error {
-                NotFoundCarEntryException(
-                    message = "No one car entry was found for license plate: '$licensePlate'")
-            })
+    fun logEntry(carEntry: CarEntry): Mono<CarEntry> =
+        garageLoggingService.logGarageEntry(GarageLogging.of(carEntry))
+            .map { carEntry }
 
 }

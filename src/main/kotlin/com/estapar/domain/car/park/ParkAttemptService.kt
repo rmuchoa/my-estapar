@@ -1,31 +1,24 @@
 package com.estapar.domain.car.park
 
-import com.estapar.domain.car.entry.CarEntryService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono
 
 open class ParkAttemptService(
     val spotService: SpotService,
-    val parkedCarService: ParkedCarService,
-    val carEntryService: CarEntryService
+    val parkingService: ParkingService,
 ) {
 
-    fun attemptPark(parkAttempt: ParkAttempt): Mono<ParkedCar> =
-        Mono.zip(
-            carEntryService.findCarEntryBy(
-                licensePlate = parkAttempt.licensePlate),
-            spotService.findSpotBy(
+    fun attemptPark(parkAttempt: ParkAttempt): Mono<Parking> =
+        spotService.findSpotBy(
                 latitude = parkAttempt.latitude,
                 longitude = parkAttempt.longitude)
-        )
-            .map { tuple ->
-                ParkedCar.of(
+            .map { spot ->
+                Parking.of(
                     parkAttempt = parkAttempt,
-                    carEntry = tuple.t1,
-                    spot = tuple.t2)
+                    spot = spot)
             }
-            .flatMap { parkedCar ->
-                parkedCarService.parkCarOnSpot(parkedCar)
+            .flatMap { parking ->
+                parkingService.parkCarOnSpot(parking)
             }
 
 }

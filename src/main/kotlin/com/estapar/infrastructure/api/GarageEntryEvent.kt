@@ -11,6 +11,8 @@ open class GarageEntryEvent(
 ) : GarageWebhookEvent(licensePlate, eventType) {
 
     fun toDomain(): CarEntry =
-        CarEntry(entryTime = entryTime, licensePlate = licensePlate)
+        CarEntry(
+            entryTime = entryTime,
+            licensePlate = licensePlate)
 
 }
