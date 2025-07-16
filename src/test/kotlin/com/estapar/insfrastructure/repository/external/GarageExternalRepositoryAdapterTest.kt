@@ -2,6 +2,7 @@ package com.estapar.insfrastructure.repository.external
 
 import com.estapar.domain.garage.Garage
 import com.estapar.domain.garage.sector.Sector
+import com.estapar.domain.garage.sector.SectorStatus
 import com.estapar.domain.garage.spot.Spot
 import com.estapar.infrastructure.client.GarageSectorDTO
 import com.estapar.infrastructure.client.GarageWebClient
@@ -15,6 +16,7 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasProperty
 import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.instanceOf
+import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -67,12 +69,14 @@ class GarageExternalRepositoryAdapterTest {
                         hasSize(1),
                         contains(allOf(
                             instanceOf(Sector::class.java),
+                            hasProperty("id", nullValue()),
                             hasProperty("name", equalTo(sector.sector)),
                             hasProperty("basePrice", equalTo(sector.basePrice)),
                             hasProperty("openHour", equalTo(sector.openHour)),
                             hasProperty("closeHour", equalTo(sector.closeHour)),
                             hasProperty("maxCapacity", equalTo(sector.maxCapacity)),
                             hasProperty("durationLimitMinutes", equalTo(sector.durationLimitMinutes)),
+                            hasProperty("status", equalTo(SectorStatus.OPENED)),
                         ))
                     )),
                     hasProperty("spots", allOf(
@@ -80,7 +84,7 @@ class GarageExternalRepositoryAdapterTest {
                         hasSize(1),
                         contains(allOf(
                             instanceOf(Spot::class.java),
-                            hasProperty("id", equalTo(spot.id)),
+                            hasProperty("id", nullValue()),
                             hasProperty("sector", instanceOf<Sector>(Sector::class.java)),
                             hasProperty("latitude", equalTo(spot.latitude)),
                             hasProperty("longitude", equalTo(spot.longitude)),

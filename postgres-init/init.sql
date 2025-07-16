@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS garage_sector (
     max_capacity INTEGER NOT NULL,
     duration_limit_minutes INTEGER NOT NULL,
     open_hour TIME NOT NULL,
-    close_hour TIME NOT NULL
+    close_hour TIME NOT NULL,
+    status TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS garage_spot (
@@ -28,11 +29,11 @@ CREATE TABLE IF NOT EXISTS car_entry (
 
 CREATE TABLE IF NOT EXISTS parked_car (
     id SERIAL PRIMARY KEY,
+    spot_id INTEGER NOT NULL,
+    car_entry_id INTEGER NOT NULL,
     license_plate TEXT NOT NULL,
     parking_time TIMESTAMP NOT NULL,
-    car_entry_id INTEGER NOT NULL,
     price_level_rate INTEGER NOT NULL,
-    spot_id INTEGER NOT NULL,
     CONSTRAINT fk_car_entry
         FOREIGN KEY (car_entry_id)
         REFERENCES car_entry(id)

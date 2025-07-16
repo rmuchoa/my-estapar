@@ -3,7 +3,6 @@ package com.estapar.infrastructure.repository
 import com.estapar.domain.garage.spot.Spot
 import com.estapar.domain.garage.spot.SpotRepository
 import com.estapar.infrastructure.repository.postgresql.entity.GarageSpotEntity
-import com.estapar.infrastructure.repository.postgresql.JPAGarageSectorRepository
 import com.estapar.infrastructure.repository.postgresql.JPAGarageSpotRepository
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
@@ -11,7 +10,7 @@ import reactor.core.publisher.Mono
 @Repository
 class SpotRepositoryAdapter(
     private val repository: JPAGarageSpotRepository,
-    private val sectorRepository: JPAGarageSectorRepository
+    private val sectorRepository: SectorRepositoryAdapter
 ) : SpotRepository {
 
     override fun save(spot: Spot): Mono<Spot> =
@@ -29,8 +28,8 @@ class SpotRepositoryAdapter(
     private fun fillSector(entity: GarageSpotEntity): Mono<Spot> {
         return entity.sectorId?.let { sectorId ->
             sectorRepository.findById(sectorId)
-                .map { sectorEntity ->
-                    entity.toDomain(sector = sectorEntity.toDomain())
+                .map { sector ->
+                    entity.toDomain(sector = sector)
                 }
         }?: Mono.empty()
     }

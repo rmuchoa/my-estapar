@@ -18,6 +18,13 @@ open class SpotService(
                     message = "No one spot was found for latitude: '$latitude' and longitude: '$longitude'")
             })
 
+    fun findSpotBy(id: Long): Mono<Spot> =
+        repository.findById(id)
+            .switchIfEmpty(Mono.error {
+                NotFoundSpotException(
+                    message = "No one spot was found for id: '$id'")
+            })
+
     fun saveSpot(spot: Spot): Mono<Spot> =
         repository.save(spot)
 

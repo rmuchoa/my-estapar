@@ -1,6 +1,7 @@
 package com.estapar.insfrastructure.repository
 
 import com.estapar.domain.garage.sector.Sector
+import com.estapar.domain.garage.sector.SectorStatus
 import com.estapar.infrastructure.repository.SectorRepositoryAdapter
 import com.estapar.infrastructure.repository.postgresql.entity.GarageSectorEntity
 import com.estapar.infrastructure.repository.postgresql.entity.GarageSpotEntity
@@ -22,7 +23,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import java.math.BigDecimal
@@ -118,7 +118,6 @@ class SectorRepositoryAdapterTest {
             occupied = false
         )
         `when`(repository.save(any())).thenReturn(Mono.just(entity.copy(id = sectorId)))
-        `when`(spotRepository.findBySectorId(sectorId)).thenReturn(Flux.just(spotEntity))
 
         StepVerifier.create(adapter.save(sector))
             .assertNext { sector ->
@@ -130,7 +129,8 @@ class SectorRepositoryAdapterTest {
                     hasProperty("maxCapacity", equalTo(entity.maxCapacity)),
                     hasProperty("durationLimitMinutes", equalTo(entity.durationLimitMinutes)),
                     hasProperty("openHour", equalTo(entity.openHour)),
-                    hasProperty("closeHour", equalTo(entity.closeHour))
+                    hasProperty("closeHour", equalTo(entity.closeHour)),
+                    hasProperty("status", equalTo(SectorStatus.CLOSED))
                 ))
             }
             .verifyComplete()

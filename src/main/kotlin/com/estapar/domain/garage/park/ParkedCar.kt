@@ -22,7 +22,7 @@ data class ParkedCar(
         spot.isSectorClosedFor(parkingTime = parkingTime.toLocalTime())
 
     fun hasOvercapacityAlert(): Boolean =
-        spot.hasOvercapacityAlert()
+        spot.hasReachedSectorMaxCapacity()
 
     companion object {
         fun of(parkAttempt: ParkAttempt, carEntry: CarEntry, spot: Spot): ParkedCar =

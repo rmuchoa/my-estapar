@@ -18,11 +18,11 @@ data class Spot(
     fun isSectorClosedFor(parkingTime: LocalTime): Boolean =
         sector?.isClosedFor(parkingTime)?: false
 
-    fun hasOverstayAlert(duration: Duration): Boolean =
-        sector?.hasOverDurationAlert(duration)?: false
+    fun hasReachedSectorDurationLimit(duration: Duration): Boolean =
+        sector?.hasReachedDurationLimit(duration)?: false
 
-    fun hasOvercapacityAlert(): Boolean =
-        sector?.hasOverCapacityAlert()?: false
+    fun hasReachedSectorMaxCapacity(): Boolean =
+        sector?.hasReachedMaxCapacity()?: false
 
     fun definePriceRuleByCapacity(): DynamicPriceRule =
         sector?.definePriceRuleByCapacity()?: DynamicPriceRule.TWENTY_FIVE_PERCENT_CAPACITY
