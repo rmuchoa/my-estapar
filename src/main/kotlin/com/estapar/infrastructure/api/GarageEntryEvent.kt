@@ -1,6 +1,6 @@
 package com.estapar.infrastructure.api
 
-import com.estapar.domain.garage.carEntry.CarEntry
+import com.estapar.domain.carEntry.CarEntry
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 

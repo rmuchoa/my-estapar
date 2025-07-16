@@ -1,6 +1,6 @@
-package com.estapar.domain.garage.park
+package com.estapar.domain.park
 
-import com.estapar.domain.garage.carEntry.CarEntry
+import com.estapar.domain.carEntry.CarEntry
 import com.estapar.domain.garage.spot.Spot
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now

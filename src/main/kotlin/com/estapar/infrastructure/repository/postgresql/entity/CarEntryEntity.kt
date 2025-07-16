@@ -1,6 +1,6 @@
 package com.estapar.infrastructure.repository.postgresql.entity
 
-import com.estapar.domain.garage.carEntry.CarEntry
+import com.estapar.domain.carEntry.CarEntry
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

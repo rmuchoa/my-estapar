@@ -1,6 +1,6 @@
 package com.estapar.infrastructure.api
 
-import com.estapar.domain.garage.park.ParkAttempt
+import com.estapar.domain.park.ParkAttempt
 import com.fasterxml.jackson.annotation.JsonProperty
 
 open class GarageParkedEvent(

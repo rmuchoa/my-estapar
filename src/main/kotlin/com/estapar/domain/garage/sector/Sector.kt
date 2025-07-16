@@ -1,6 +1,6 @@
 package com.estapar.domain.garage.sector
 
-import com.estapar.domain.garage.park.DynamicPriceRule
+import com.estapar.domain.park.DynamicPriceRule
 import com.estapar.domain.garage.spot.Spot
 import java.math.BigDecimal
 import java.time.LocalTime

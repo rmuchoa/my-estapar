@@ -1,4 +1,4 @@
-package com.estapar.domain.garage.park.exception
+package com.estapar.domain.park.exception
 
 class OverfilledOccupancyGarageSectorException(
     message: String

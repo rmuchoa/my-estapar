@@ -1,7 +1,7 @@
 package com.estapar.infrastructure.repository.postgresql.entity
 
-import com.estapar.domain.garage.carEntry.CarEntry
-import com.estapar.domain.garage.park.ParkedCar
+import com.estapar.domain.carEntry.CarEntry
+import com.estapar.domain.park.ParkedCar
 import com.estapar.domain.garage.spot.Spot
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column

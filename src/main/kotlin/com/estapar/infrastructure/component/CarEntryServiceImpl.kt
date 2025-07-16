@@ -1,7 +1,7 @@
 package com.estapar.infrastructure.component
 
-import com.estapar.domain.garage.carEntry.CarEntryRepository
-import com.estapar.domain.garage.carEntry.CarEntryService
+import com.estapar.domain.carEntry.CarEntryRepository
+import com.estapar.domain.carEntry.CarEntryService
 import org.springframework.stereotype.Service
 
 @Service

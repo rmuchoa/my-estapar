@@ -1,8 +1,8 @@
-package com.estapar.domain.garage.park
+package com.estapar.domain.park
 
-import com.estapar.domain.garage.park.exception.NonOperationalGarageSectorException
-import com.estapar.domain.garage.park.exception.OverfilledOccupancyGarageSectorException
-import com.estapar.domain.garage.park.exception.UnavailableParkingSpotException
+import com.estapar.domain.park.exception.NonOperationalGarageSectorException
+import com.estapar.domain.park.exception.OverfilledOccupancyGarageSectorException
+import com.estapar.domain.park.exception.UnavailableParkingSpotException
 import com.estapar.domain.garage.sector.SectorService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono
@@ -23,15 +23,18 @@ open class ParkedCarService(
         return when {
             parkedCar.isSpotStillOccupied() -> Mono.error {
                 UnavailableParkingSpotException(
-                    message = "Parking spot still remains occupied and unavailable for parking!")
+                    message = "Parking spot still remains occupied and unavailable for parking!"
+                )
             }
             parkedCar.isOutsideOpeningHours() -> Mono.error {
                 NonOperationalGarageSectorException(
-                    message = "Garage sector ${parkedCar.spot.sector?.name} is out of opening hours!")
+                    message = "Garage sector ${parkedCar.spot.sector?.name} is out of opening hours!"
+                )
             }
             parkedCar.hasOvercapacityAlert() -> Mono.error {
                 OverfilledOccupancyGarageSectorException(
-                    message = "Garage sector ${parkedCar.spot.sector?.name} has overfilled occupancy capacity!")
+                    message = "Garage sector ${parkedCar.spot.sector?.name} has overfilled occupancy capacity!"
+                )
             }
             else -> { Mono.just(parkedCar) }
         }

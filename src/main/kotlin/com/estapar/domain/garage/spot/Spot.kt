@@ -1,6 +1,6 @@
 package com.estapar.domain.garage.spot
 
-import com.estapar.domain.garage.park.DynamicPriceRule
+import com.estapar.domain.park.DynamicPriceRule
 import com.estapar.domain.garage.sector.Sector
 import java.time.LocalTime
 import kotlin.time.Duration

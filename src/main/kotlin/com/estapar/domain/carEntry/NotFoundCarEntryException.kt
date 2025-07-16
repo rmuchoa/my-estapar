@@ -1,4 +1,4 @@
-package com.estapar.domain.garage.carEntry
+package com.estapar.domain.carEntry
 
 class NotFoundCarEntryException(
     message: String
