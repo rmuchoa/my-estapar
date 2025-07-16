@@ -36,8 +36,27 @@ CREATE TABLE IF NOT EXISTS garage_parking (
     price_level_rate INTEGER NOT NULL,
     parking_time TIMESTAMP NOT NULL,
     unparking_time TIMESTAMP NULL,
+    status TEXT NOT NULL,
     CONSTRAINT fk_garage_spot
         FOREIGN KEY (spot_id)
         REFERENCES garage_spot(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS garage_billing (
+    id SERIAL PRIMARY KEY,
+    logging_id INTEGER NOT NULL,
+    parking_id INTEGER NOT NULL,
+    license_plate TEXT NOT NULL,
+    billing_time TIMESTAMP NOT NULL,
+    billing_duration_time TIME NOT NULL,
+    charged_amount DECIMAL(5,2) NOT NULL,
+    CONSTRAINT fk_garage_logging
+        FOREIGN KEY (logging_id)
+        REFERENCES garage_logging(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_garage_parking
+        FOREIGN KEY (parking_id)
+        REFERENCES garage_parking(id)
         ON DELETE CASCADE
 );

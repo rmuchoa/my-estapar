@@ -2,6 +2,7 @@ package com.estapar.infrastructure.repository
 
 import com.estapar.domain.car.park.Parking
 import com.estapar.domain.car.park.ParkingRepository
+import com.estapar.domain.car.park.ParkingStatus
 import com.estapar.domain.garage.spot.SpotRepository
 import com.estapar.infrastructure.repository.postgresql.JPAGarageParkingRepository
 import com.estapar.infrastructure.repository.postgresql.entity.GarageParkingEntity
@@ -18,8 +19,10 @@ class ParkingRepositoryAdapter(
         repository.save<GarageParkingEntity>(GarageParkingEntity.of(parking))
             .map { entity -> entity.toDomain(spot = parking.spot) }
 
-    override fun findByLicensePlate(licensePlate: String): Mono<Parking> =
-        repository.findByLicensePlate(licensePlate)
+    override fun findEnteredByLicensePlate(licensePlate: String): Mono<Parking> =
+        repository.findByLicensePlateAndStatus(
+            licensePlate = licensePlate,
+            status = ParkingStatus.ENTERED)
             .flatMap { entity -> fillSpot(entity) }
 
     private fun fillSpot(entity: GarageParkingEntity): Mono<Parking> =

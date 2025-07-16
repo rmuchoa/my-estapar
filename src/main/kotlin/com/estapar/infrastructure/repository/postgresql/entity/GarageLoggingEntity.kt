@@ -19,8 +19,10 @@ data class GarageLoggingEntity(
     fun toDomain(): GarageLogging =
         GarageLogging(
             id = id,
+            licensePlate = licensePlate,
             entryTime = entryTime,
-            licensePlate = licensePlate)
+            exitTime = exitTime,
+            status = GarageLoggingStatus.valueOf(status))
 
     companion object {
         fun of(garageLogging: GarageLogging): GarageLoggingEntity =

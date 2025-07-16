@@ -1,6 +1,8 @@
 package com.estapar.infrastructure.repository.postgresql.entity
 
+import com.estapar.domain.car.park.DynamicPriceRule
 import com.estapar.domain.car.park.Parking
+import com.estapar.domain.car.park.ParkingStatus
 import com.estapar.domain.garage.spot.Spot
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
@@ -14,7 +16,8 @@ data class GarageParkingEntity(
     @Column("license_plate") val licensePlate: String,
     @Column("price_level_rate") val priceLevelRate: Int,
     @Column("parking_time") val parkingTime: LocalDateTime,
-    @Column("unparking_time") val unparkingTime: LocalDateTime?
+    @Column("unparking_time") val unparkingTime: LocalDateTime?,
+    @Column("status") val status: String = ParkingStatus.ENTERED.name
 ) {
 
     fun toDomain(spot: Spot): Parking =
@@ -23,7 +26,9 @@ data class GarageParkingEntity(
             spot = spot,
             licensePlate = licensePlate,
             parkingTime = parkingTime,
-            unparkingTime = unparkingTime)
+            unparkingTime = unparkingTime,
+            priceRule = DynamicPriceRule.of(priceLevelRate = priceLevelRate),
+            status = ParkingStatus.valueOf(status))
 
     companion object {
         fun of(parking: Parking): GarageParkingEntity =
@@ -33,6 +38,7 @@ data class GarageParkingEntity(
                 licensePlate = parking.licensePlate,
                 priceLevelRate = parking.priceRule.priceRate,
                 parkingTime = parking.parkingTime,
-                unparkingTime = parking.unparkingTime)
+                unparkingTime = parking.unparkingTime,
+                status = parking.status.name)
     }
 }

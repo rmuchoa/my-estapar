@@ -22,7 +22,9 @@ class GarageLoggingRepositoryAdapter(
             .map { entity -> entity.toDomain() }
 
     override fun findActiveByLicensePlate(licensePlate: String): Mono<GarageLogging> =
-        repository.findByLicensePlateAndStatus(licensePlate, GarageLoggingStatus.ACTIVE)
+        repository.findByLicensePlateAndStatus(
+            licensePlate = licensePlate,
+            status = GarageLoggingStatus.ACTIVE)
             .map { entity -> entity.toDomain() }
 
 }
