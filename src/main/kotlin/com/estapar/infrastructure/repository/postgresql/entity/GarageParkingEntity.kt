@@ -12,8 +12,9 @@ data class GarageParkingEntity(
     @Id @Column("id") val id: Long? = null,
     @Column("spot_id") val spotId: Long,
     @Column("license_plate") val licensePlate: String,
-    @Column("parking_time") val parkingTime: LocalDateTime,
     @Column("price_level_rate") val priceLevelRate: Int,
+    @Column("parking_time") val parkingTime: LocalDateTime,
+    @Column("unparking_time") val unparkingTime: LocalDateTime?
 ) {
 
     fun toDomain(spot: Spot): Parking =
@@ -21,7 +22,8 @@ data class GarageParkingEntity(
             id = id,
             spot = spot,
             licensePlate = licensePlate,
-            parkingTime = parkingTime)
+            parkingTime = parkingTime,
+            unparkingTime = unparkingTime)
 
     companion object {
         fun of(parking: Parking): GarageParkingEntity =
@@ -29,7 +31,8 @@ data class GarageParkingEntity(
                 id = parking.id,
                 spotId = parking.spot.id!!,
                 licensePlate = parking.licensePlate,
+                priceLevelRate = parking.priceRule.priceRate,
                 parkingTime = parking.parkingTime,
-                priceLevelRate = parking.priceRule.priceRate)
+                unparkingTime = parking.unparkingTime)
     }
 }

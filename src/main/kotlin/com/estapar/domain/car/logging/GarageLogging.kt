@@ -8,7 +8,7 @@ data class GarageLogging(
     val id: Long? = null,
     val licensePlate: String,
     val entryTime: LocalDateTime,
-    val exit: LocalDateTime? = null,
+    val exitTime: LocalDateTime? = null,
     val status: GarageLoggingStatus = GarageLoggingStatus.ACTIVE) {
 
     companion object {

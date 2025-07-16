@@ -8,7 +8,8 @@ data class Parking(
     val id: Long? = null,
     val spot: Spot,
     val licensePlate: String,
-    val parkingTime: LocalDateTime = now()
+    val parkingTime: LocalDateTime = now(),
+    val unparkingTime: LocalDateTime? = null,
 ) {
 
     var priceRule: DynamicPriceRule = spot.definePriceRuleByCapacity()

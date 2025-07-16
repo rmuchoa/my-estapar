@@ -12,7 +12,7 @@ data class GarageLoggingEntity(
     @Id @Column("id") val id: Long? = null,
     @Column("license_plate") val licensePlate: String,
     @Column("entry_time") val entryTime: LocalDateTime,
-    @Column("exit_time") val exit: LocalDateTime? = null,
+    @Column("exit_time") val exitTime: LocalDateTime? = null,
     @Column("status") val status: String = GarageLoggingStatus.ACTIVE.name
 ) {
 
@@ -27,7 +27,9 @@ data class GarageLoggingEntity(
             GarageLoggingEntity(
                 id = garageLogging.id,
                 entryTime = garageLogging.entryTime,
-                licensePlate = garageLogging.licensePlate)
+                exitTime = garageLogging.exitTime,
+                licensePlate = garageLogging.licensePlate,
+                status = garageLogging.status.name)
     }
 
 }

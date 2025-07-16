@@ -1,8 +1,8 @@
-package com.estapar.domain.car.entry
+package com.estapar.domain.car.exit
 
 import java.time.LocalDateTime
 
-data class CarEntry(
+data class CarExit(
     val id: Long? = null,
     val licensePlate: String,
-    val entryTime: LocalDateTime)
+    val exitTime: LocalDateTime)

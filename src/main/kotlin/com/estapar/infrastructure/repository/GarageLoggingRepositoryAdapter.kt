@@ -13,7 +13,7 @@ class GarageLoggingRepositoryAdapter(
     val repository: JPAGarageLoggingRepository
 ) : GarageLoggingRepository {
 
-    override fun logGarageEntry(garageLogging: GarageLogging): Mono<GarageLogging> =
+    override fun saveGarageLogging(garageLogging: GarageLogging): Mono<GarageLogging> =
         repository.save<GarageLoggingEntity>(GarageLoggingEntity.of(garageLogging))
             .map { entity -> entity.toDomain() }
 

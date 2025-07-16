@@ -6,6 +6,7 @@ import com.estapar.domain.car.park.exception.UnavailableParkingSpotException
 import com.estapar.domain.garage.sector.SectorService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono
+import java.time.LocalDateTime
 
 open class ParkingService(
     val repository: ParkingRepository,
@@ -13,11 +14,19 @@ open class ParkingService(
     val sectorService: SectorService
 ) {
 
+    fun findBy(licensePlate: String): Mono<Parking> =
+        repository.findByLicensePlate(licensePlate)
+
     fun parkCarOnSpot(parking: Parking): Mono<Parking> =
         validParking(parking)
             .flatMap { valid -> repository.save(parking = valid) }
             .flatMap { saved -> markSpotAsOccupied(parking = saved) }
-            .flatMap { saved -> checkSectorCapacity(parking = saved) }
+            .flatMap { saved -> checkSectorCapacityToClose(parking = saved) }
+
+    fun unparkCarFromSpot(parking: Parking): Mono<Parking> =
+        repository.save(parking = parking.copy(unparkingTime = LocalDateTime.now()))
+            .flatMap { saved -> markSpotAsFree(parking = saved) }
+            .flatMap { saved -> checkSectorCapacityToReopen(parking = saved) }
 
     private fun validParking(parking: Parking): Mono<Parking> {
         return when {
@@ -43,17 +52,31 @@ open class ParkingService(
     private fun markSpotAsOccupied(parking: Parking): Mono<Parking> =
         spotService.saveSpot(spot = parking.spot.copy(occupied = true))
             .flatMap { spot ->
-                spot.id?.let { id ->
-                    spotService.findSpotBy(id)
-                }?: Mono.just(spot)
+                spot.id!!.let { id -> spotService.findSpotBy(id) }
             }
             .map { updatedSpot -> parking.copy(spot = updatedSpot) }
 
-    private fun checkSectorCapacity(parking: Parking): Mono<Parking> =
+    private fun markSpotAsFree(parking: Parking): Mono<Parking> =
+        spotService.saveSpot(spot = parking.spot.copy(occupied = false))
+            .flatMap { spot ->
+                spot.id!!.let { id -> spotService.findSpotBy(id) }
+            }
+            .map { updatedSpot -> parking.copy(spot = updatedSpot) }
+
+    private fun checkSectorCapacityToClose(parking: Parking): Mono<Parking> =
         Mono.just(parking)
             .filter { parking -> parking.hasReachedSectorMaxCapacity() }
-            .flatMap { parking -> sectorService.closeSectorOperation(sector = parking.spot.sector!!) }
+            .flatMap { parking ->
+                sectorService.closeSectorOperation(sector = parking.spot.sector!!)
+            }
             .map { parking }
             .switchIfEmpty(Mono.just(parking))
+
+    private fun checkSectorCapacityToReopen(parking: Parking): Mono<Parking> =
+        Mono.just(parking)
+            .filter { parking -> parking.hasReachedSectorMaxCapacity() }
+            .switchIfEmpty(
+                sectorService.reopenSectorOperation(sector = parking.spot.sector!!)
+                    .map { parking })
 
 }

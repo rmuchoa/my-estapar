@@ -1,5 +1,6 @@
 package com.estapar.infrastructure.api
 
+import com.estapar.domain.car.exit.CarExit
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
@@ -7,4 +8,11 @@ open class GarageExitEvent(
     @JsonProperty("exit_time") val exitTime: LocalDateTime,
     @JsonProperty("license_plate") licensePlate: String,
     @JsonProperty("event_type") eventType: GarageEventType
-) : GarageWebhookEvent(licensePlate, eventType)
+) : GarageWebhookEvent(licensePlate, eventType) {
+
+    fun toDomain(): CarExit =
+        CarExit(
+            exitTime = exitTime,
+            licensePlate = licensePlate)
+
+}
