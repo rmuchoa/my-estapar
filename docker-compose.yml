@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  estapar-postgres:
+    image: postgres:16
+    container_name: estapar-postgres
+    environment:
+      POSTGRES_DB: estapar
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    network_mode: "host"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+
+  garage-simulator:
+    image: cfontes0estapar/garage-sim:1.0.0
+    container_name: garage-simulator
+    network_mode: "host"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  estapar-api:
+    build:
+      context: .
+    container_name: estapar-api
+    network_mode: "host"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    ports:
+      - "3003:3003"
