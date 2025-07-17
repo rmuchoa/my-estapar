@@ -3,6 +3,7 @@ package com.estapar.infrastructure.repository.postgresql.entity
 import com.estapar.domain.car.billing.Billing
 import com.estapar.domain.car.logging.GarageLogging
 import com.estapar.domain.car.park.Parking
+import com.estapar.domain.revenue.RevenueBilling
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
@@ -31,6 +32,13 @@ data class GarageBillingEntity(
             id = id,
             parking = parking,
             garageLogging = garageLogging,
+            licensePlate = licensePlate,
+            billingTime = billingTime,
+            billingDuration = getBillingDuration(),
+            chargedAmount = chargedAmount)
+
+    fun toRevenueDomain(): RevenueBilling =
+        RevenueBilling(
             licensePlate = licensePlate,
             billingTime = billingTime,
             billingDuration = getBillingDuration(),

@@ -18,7 +18,7 @@ class SpotReportController(
     private val log = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping()
-    fun mountSpotReportForLicensePlate(
+    fun mountSpotReportForLatitudeAndLongitudePosition(
         @RequestParam("lat") latitude: Double,
         @RequestParam("lng") longitude: Double
     ): Mono<SpotReportResponse> =
