@@ -33,21 +33,20 @@ data class Sector(
     fun hasReachedMaxCapacity(): Boolean =
         getAllOccupiedSpots().size >= maxCapacity
 
-    fun definePriceRuleByCapacity(): DynamicPriceRule {
-        return when((getOccupiedSpotsNumberPlusOne() * 100) / maxCapacity) {
+    fun definePriceRuleByCapacity(): DynamicPriceRule =
+        when((getOccupiedSpotsNumberPlusOne() * 100) / maxCapacity) {
             in 75.0..100.0 -> DynamicPriceRule.ONE_HUNDRED_PERCENT_CAPACITY
             in 50.0..75.0 -> DynamicPriceRule.SEVENTY_FIVE_PERCENT_CAPACITY
             in 25.0..50.0 -> DynamicPriceRule.FIFTY_PERCENT_CAPACITY
             in 0.0..25.0 -> DynamicPriceRule.TWENTY_FIVE_PERCENT_CAPACITY
             else -> DynamicPriceRule.TWENTY_FIVE_PERCENT_CAPACITY
         }
-    }
 
     private fun getOccupiedSpotsNumberPlusOne(): Double =
         getAllOccupiedSpots().size.toDouble() + 1.0
 
-    fun generateChargeFor(billingDuration: Duration, priceRule: DynamicPriceRule): BigDecimal {
-        return when (billingDuration.inWholeMinutes) {
+    fun generateChargeFor(billingDuration: Duration, priceRule: DynamicPriceRule): BigDecimal =
+        when (billingDuration.inWholeMinutes) {
             in 0..15 -> BigDecimal.ZERO
             in 15..60 -> basePrice
             else -> {
@@ -59,6 +58,5 @@ data class Sector(
                 basePrice + (discountedPricePer15Minutes * numberBlocksOf15Minutes.toBigDecimal())
             }
         }
-    }
 
 }

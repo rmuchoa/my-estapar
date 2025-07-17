@@ -14,7 +14,13 @@ data class GarageLogging(
     val status: GarageLoggingStatus = GarageLoggingStatus.ACTIVE) {
 
     fun getBillingDuration(): kotlin.time.Duration =
-        Duration.between(entryTime, exitTime)
+        getBillingDuration(lastTime = exitTime!!)
+
+    fun getUntilNowDuration(): kotlin.time.Duration =
+        getBillingDuration(lastTime = LocalDateTime.now())
+
+    fun getBillingDuration(lastTime: LocalDateTime): kotlin.time.Duration =
+        Duration.between(entryTime, lastTime)
             .let { duration -> duration.toKotlinDuration() }
 
     companion object {
