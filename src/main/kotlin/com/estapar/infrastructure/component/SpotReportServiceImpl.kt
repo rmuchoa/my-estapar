@@ -1,12 +1,14 @@
 package com.estapar.infrastructure.component
 
-import com.estapar.domain.car.park.attempt.ParkAttemptService
+import com.estapar.domain.car.logging.GarageLoggingService
 import com.estapar.domain.car.park.ParkingService
+import com.estapar.domain.garage.spot.SpotReportService
 import com.estapar.domain.garage.spot.SpotService
 import org.springframework.stereotype.Service
 
 @Service
-class ParkAttemptServiceImpl(
+class SpotReportServiceImpl(
     spotService: SpotService,
     parkingService: ParkingService,
-) : ParkAttemptService(spotService, parkingService)
+    loggingService: GarageLoggingService
+) : SpotReportService(spotService, parkingService, loggingService)

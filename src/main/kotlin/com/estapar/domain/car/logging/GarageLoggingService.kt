@@ -1,8 +1,8 @@
 package com.estapar.domain.car.logging
 
 import com.estapar.domain.car.GarageLoggingStatus
-import com.estapar.domain.car.entry.CarEntry
-import com.estapar.domain.car.exit.CarExit
+import com.estapar.domain.car.logging.entry.CarEntry
+import com.estapar.domain.car.logging.exit.CarExit
 import reactor.core.publisher.Mono
 
 open class GarageLoggingService(

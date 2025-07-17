@@ -1,5 +1,6 @@
 package com.estapar.infrastructure.client
 
+import com.estapar.infrastructure.client.dto.LoadGarageResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Component

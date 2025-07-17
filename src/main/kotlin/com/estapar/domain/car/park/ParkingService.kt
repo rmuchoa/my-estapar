@@ -14,8 +14,11 @@ open class ParkingService(
     val sectorService: SectorService
 ) {
 
-    fun findBy(licensePlate: String): Mono<Parking> =
+    fun findEnteredBy(licensePlate: String): Mono<Parking> =
         repository.findEnteredByLicensePlate(licensePlate)
+
+    fun findEnteredBy(spotId: Long): Mono<Parking> =
+        repository.findEnteredBySpotId(spotId)
 
     fun parkCarOnSpot(parking: Parking): Mono<Parking> =
         validParking(parking)
@@ -31,8 +34,8 @@ open class ParkingService(
             .flatMap { saved -> markSpotAsFree(parking = saved) }
             .flatMap { saved -> checkSectorCapacityToReopen(parking = saved) }
 
-    private fun validParking(parking: Parking): Mono<Parking> {
-        return when {
+    private fun validParking(parking: Parking): Mono<Parking> =
+        when {
             parking.isSpotStillOccupied() -> Mono.error {
                 UnavailableParkingSpotException(
                     message = "Parking spot still remains occupied and unavailable for parking!"
@@ -50,7 +53,6 @@ open class ParkingService(
             }
             else -> { Mono.just(parking) }
         }
-    }
 
     private fun markSpotAsOccupied(parking: Parking): Mono<Parking> =
         spotService.saveSpot(spot = parking.spot.copy(occupied = true))

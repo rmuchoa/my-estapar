@@ -19,14 +19,15 @@ data class Billing(
     companion object {
         fun of(garageLogging: GarageLogging, parking: Parking): Billing =
             garageLogging.getBillingDuration()
-                .let { billingDuration ->
-                    Billing(
-                        parking = parking,
-                        garageLogging = garageLogging,
-                        licensePlate = garageLogging.licensePlate,
-                        chargedAmount = parking.generateChargeFor(billingDuration),
-                        billingDuration = billingDuration)
-                }
+                .let { billingDuration -> of(garageLogging, parking, billingDuration) }
+
+        fun of(garageLogging: GarageLogging, parking: Parking, billingDuration: Duration): Billing =
+            Billing(
+                parking = parking,
+                garageLogging = garageLogging,
+                licensePlate = garageLogging.licensePlate,
+                chargedAmount = parking.generateChargeFor(billingDuration),
+                billingDuration = billingDuration)
     }
 
 }

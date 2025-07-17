@@ -1,4 +1,4 @@
-package com.estapar.domain.car.exit
+package com.estapar.domain.car.logging.exit
 
 import java.time.LocalDateTime
 

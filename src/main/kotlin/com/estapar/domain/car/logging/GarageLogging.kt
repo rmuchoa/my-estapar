@@ -1,7 +1,7 @@
 package com.estapar.domain.car.logging
 
 import com.estapar.domain.car.GarageLoggingStatus
-import com.estapar.domain.car.entry.CarEntry
+import com.estapar.domain.car.logging.entry.CarEntry
 import java.time.Duration
 import java.time.LocalDateTime
 import kotlin.time.toKotlinDuration
@@ -14,7 +14,13 @@ data class GarageLogging(
     val status: GarageLoggingStatus = GarageLoggingStatus.ACTIVE) {
 
     fun getBillingDuration(): kotlin.time.Duration =
-        Duration.between(entryTime, exitTime)
+        getBillingDuration(lastTime = exitTime!!)
+
+    fun getUntilNowDuration(): kotlin.time.Duration =
+        getBillingDuration(lastTime = LocalDateTime.now())
+
+    fun getBillingDuration(lastTime: LocalDateTime): kotlin.time.Duration =
+        Duration.between(entryTime, lastTime)
             .let { duration -> duration.toKotlinDuration() }
 
     companion object {

@@ -1,5 +1,6 @@
 package com.estapar.domain.car.park
 
+import com.estapar.domain.car.park.attempt.ParkAttempt
 import com.estapar.domain.garage.spot.Spot
 import java.math.BigDecimal
 import java.time.LocalDateTime

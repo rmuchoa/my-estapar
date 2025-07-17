@@ -1,18 +1,18 @@
-package com.estapar.infrastructure.api
+package com.estapar.infrastructure.api.dto.request
 
-import com.estapar.domain.car.entry.CarEntry
+import com.estapar.domain.car.logging.exit.CarExit
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
-open class GarageEntryEvent(
-    @JsonProperty("entry_time") val entryTime: LocalDateTime,
+open class GarageExitEvent(
+    @JsonProperty("exit_time") val exitTime: LocalDateTime,
     @JsonProperty("license_plate") licensePlate: String,
     @JsonProperty("event_type") eventType: GarageEventType
 ) : GarageWebhookEvent(licensePlate, eventType) {
 
-    fun toDomain(): CarEntry =
-        CarEntry(
-            entryTime = entryTime,
+    fun toDomain(): CarExit =
+        CarExit(
+            exitTime = exitTime,
             licensePlate = licensePlate)
 
 }

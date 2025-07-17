@@ -1,5 +1,7 @@
-package com.estapar.domain.car.park
+package com.estapar.domain.car.park.attempt
 
+import com.estapar.domain.car.park.Parking
+import com.estapar.domain.car.park.ParkingService
 import com.estapar.domain.garage.spot.SpotService
 import reactor.core.publisher.Mono
 
@@ -13,7 +15,7 @@ open class ParkAttemptService(
                 latitude = parkAttempt.latitude,
                 longitude = parkAttempt.longitude)
             .map { spot ->
-                Parking.of(
+                Parking.Companion.of(
                     parkAttempt = parkAttempt,
                     spot = spot)
             }

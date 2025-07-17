@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.client
+package com.estapar.infrastructure.client.dto
 
 import com.estapar.domain.garage.Garage
 import com.fasterxml.jackson.annotation.JsonProperty

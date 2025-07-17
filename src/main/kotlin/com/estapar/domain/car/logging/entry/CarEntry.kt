@@ -1,4 +1,4 @@
-package com.estapar.domain.car.entry
+package com.estapar.domain.car.logging.entry
 
 import com.estapar.domain.car.logging.GarageLogging
 import java.time.LocalDateTime
