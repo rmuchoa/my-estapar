@@ -2,7 +2,7 @@ package com.estapar.infrastructure.api
 
 import com.estapar.domain.car.logging.entry.CarEntryService
 import com.estapar.domain.car.logging.exit.CarExitService
-import com.estapar.domain.car.park.ParkAttemptService
+import com.estapar.domain.car.park.attempt.ParkAttemptService
 import com.estapar.infrastructure.api.dto.GarageEntryEvent
 import com.estapar.infrastructure.api.dto.GarageExitEvent
 import com.estapar.infrastructure.api.dto.GarageParkedEvent
