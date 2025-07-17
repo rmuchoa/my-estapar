@@ -14,8 +14,11 @@ open class ParkingService(
     val sectorService: SectorService
 ) {
 
-    fun findBy(licensePlate: String): Mono<Parking> =
+    fun findEnteredBy(licensePlate: String): Mono<Parking> =
         repository.findEnteredByLicensePlate(licensePlate)
+
+    fun findEnteredBy(spotId: Long): Mono<Parking> =
+        repository.findEnteredBySpotId(spotId)
 
     fun parkCarOnSpot(parking: Parking): Mono<Parking> =
         validParking(parking)

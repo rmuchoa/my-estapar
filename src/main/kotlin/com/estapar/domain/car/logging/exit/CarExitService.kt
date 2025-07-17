@@ -17,7 +17,7 @@ open class CarExitService(
             .flatMap { garageLogging ->
                 Mono.zip(
                     garageLoggingService.logExit(garageLogging = garageLogging, carExit = carExit),
-                    parkingService.findBy(licensePlate = carExit.licensePlate)
+                    parkingService.findEnteredBy(licensePlate = carExit.licensePlate)
                         .flatMap { parking -> parkingService.unparkCarFromSpot(parking) }
                 ).map { it.t1 to it.t2 }
             }

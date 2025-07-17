@@ -25,6 +25,10 @@ class ParkingRepositoryAdapter(
             status = ParkingStatus.ENTERED)
             .flatMap { entity -> fillSpot(entity) }
 
+    override fun findEnteredBySpotId(spotId: Long): Mono<Parking> =
+        repository.findBySpotIdAndStatus(spotId, status = ParkingStatus.ENTERED)
+            .flatMap { entity -> fillSpot(entity) }
+
     private fun fillSpot(entity: GarageParkingEntity): Mono<Parking> =
         spotRepository.findById(id = entity.spotId)
             .map { spot -> entity.toDomain(spot) }

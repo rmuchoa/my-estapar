@@ -12,7 +12,7 @@ open class ParkingReportService(
     fun mountParkingReportFor(licensePlate: String): Mono<ParkingReport> =
         Mono.zip(
             garageLoggingService.findActiveGarageLoggingBy(licensePlate),
-            parkingService.findBy(licensePlate)
+            parkingService.findEnteredBy(licensePlate)
         ).map { it.t1 to it.t2 }
             .map { (garageLogging, parking) ->
                 ParkingReport.of(

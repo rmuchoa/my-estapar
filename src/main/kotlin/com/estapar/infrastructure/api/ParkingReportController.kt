@@ -18,7 +18,7 @@ class ParkingReportController(
     private val log = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping("/{licensePlate}")
-    fun checkParkedCarByLicensePlate(
+    fun mountParkingReportForLicensePlate(
         @PathVariable("licensePlate") licensePlate: String
     ): Mono<ParkingReportResponse> =
         parkingReportService.mountParkingReportFor(licensePlate)

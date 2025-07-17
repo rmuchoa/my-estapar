@@ -7,4 +7,5 @@ import reactor.core.publisher.Mono
 
 interface JPAGarageParkingRepository : ReactiveCrudRepository<GarageParkingEntity, Long> {
     fun findByLicensePlateAndStatus(licensePlate: String, status: ParkingStatus): Mono<GarageParkingEntity>
+    fun findBySpotIdAndStatus(spotId: Long, status: ParkingStatus): Mono<GarageParkingEntity>
 }
