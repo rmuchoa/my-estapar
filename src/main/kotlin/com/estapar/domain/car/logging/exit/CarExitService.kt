@@ -1,4 +1,4 @@
-package com.estapar.domain.car.exit
+package com.estapar.domain.car.logging.exit
 
 import com.estapar.domain.car.billing.BillingService
 import com.estapar.domain.car.logging.GarageLoggingService

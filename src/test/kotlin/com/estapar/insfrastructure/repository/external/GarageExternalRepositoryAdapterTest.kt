@@ -4,10 +4,10 @@ import com.estapar.domain.garage.Garage
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.sector.SectorStatus
 import com.estapar.domain.garage.spot.Spot
-import com.estapar.infrastructure.client.GarageSectorDTO
+import com.estapar.infrastructure.client.dto.GarageSectorDTO
 import com.estapar.infrastructure.client.GarageWebClient
-import com.estapar.infrastructure.client.LoadGarageResponse
-import com.estapar.infrastructure.client.SpotDTO
+import com.estapar.infrastructure.client.dto.LoadGarageResponse
+import com.estapar.infrastructure.client.dto.SpotDTO
 import com.estapar.infrastructure.repository.external.GarageExternalRepositoryAdapter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf

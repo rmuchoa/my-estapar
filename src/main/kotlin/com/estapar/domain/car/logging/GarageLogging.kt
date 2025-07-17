@@ -1,7 +1,7 @@
 package com.estapar.domain.car.logging
 
 import com.estapar.domain.car.GarageLoggingStatus
-import com.estapar.domain.car.entry.CarEntry
+import com.estapar.domain.car.logging.entry.CarEntry
 import java.time.Duration
 import java.time.LocalDateTime
 import kotlin.time.toKotlinDuration

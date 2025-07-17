@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.api
+package com.estapar.infrastructure.api.dto
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo

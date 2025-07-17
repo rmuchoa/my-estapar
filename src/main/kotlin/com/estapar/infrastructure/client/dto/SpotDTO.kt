@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.client
+package com.estapar.infrastructure.client.dto
 
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.spot.Spot

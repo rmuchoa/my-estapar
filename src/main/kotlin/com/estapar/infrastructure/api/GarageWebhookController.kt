@@ -1,8 +1,12 @@
 package com.estapar.infrastructure.api
 
-import com.estapar.domain.car.entry.CarEntryService
-import com.estapar.domain.car.exit.CarExitService
+import com.estapar.domain.car.logging.entry.CarEntryService
+import com.estapar.domain.car.logging.exit.CarExitService
 import com.estapar.domain.car.park.ParkAttemptService
+import com.estapar.infrastructure.api.dto.GarageEntryEvent
+import com.estapar.infrastructure.api.dto.GarageExitEvent
+import com.estapar.infrastructure.api.dto.GarageParkedEvent
+import com.estapar.infrastructure.api.dto.GarageWebhookEvent
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
