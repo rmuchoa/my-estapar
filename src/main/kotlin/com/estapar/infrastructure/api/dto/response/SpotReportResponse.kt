@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.api.dto
+package com.estapar.infrastructure.api.dto.response
 
 import com.estapar.domain.car.logging.GarageLogging
 import com.estapar.domain.garage.spot.Spot

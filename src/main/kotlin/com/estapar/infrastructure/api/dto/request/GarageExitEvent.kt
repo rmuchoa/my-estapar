@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.api.dto
+package com.estapar.infrastructure.api.dto.request
 
 import com.estapar.domain.car.logging.exit.CarExit
 import com.fasterxml.jackson.annotation.JsonProperty

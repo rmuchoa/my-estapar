@@ -2,7 +2,7 @@ package com.estapar.infrastructure.api
 
 import com.estapar.domain.revenue.RevenueReportService
 import com.estapar.domain.revenue.RevenueFilter
-import com.estapar.infrastructure.api.dto.RevenueReportResponse
+import com.estapar.infrastructure.api.dto.response.RevenueReportResponse
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping

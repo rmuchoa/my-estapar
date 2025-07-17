@@ -2,7 +2,7 @@ package com.estapar.domain.garage.spot
 
 import com.estapar.domain.car.logging.GarageLoggingService
 import com.estapar.domain.car.park.ParkingService
-import com.estapar.infrastructure.api.dto.SpotReportResponse
+import com.estapar.infrastructure.api.dto.response.SpotReportResponse
 import reactor.core.publisher.Mono
 
 open class SpotReportService(

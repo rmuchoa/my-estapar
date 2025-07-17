@@ -1,4 +1,4 @@
-package com.estapar.infrastructure.api.dto
+package com.estapar.infrastructure.api.dto.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal

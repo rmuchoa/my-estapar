@@ -1,7 +1,7 @@
 package com.estapar.infrastructure.api
 
 import com.estapar.domain.garage.spot.SpotReportService
-import com.estapar.infrastructure.api.dto.SpotReportResponse
+import com.estapar.infrastructure.api.dto.response.SpotReportResponse
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
