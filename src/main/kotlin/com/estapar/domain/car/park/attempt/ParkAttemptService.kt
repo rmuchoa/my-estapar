@@ -3,6 +3,7 @@ package com.estapar.domain.car.park.attempt
 import com.estapar.domain.car.park.Parking
 import com.estapar.domain.car.park.ParkingService
 import com.estapar.domain.garage.spot.SpotService
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 
 open class ParkAttemptService(
@@ -10,7 +11,8 @@ open class ParkAttemptService(
     val parkingService: ParkingService,
 ) {
 
-    fun attemptPark(parkAttempt: ParkAttempt): Mono<Parking> =
+    @Transactional
+    open fun attemptPark(parkAttempt: ParkAttempt): Mono<Parking> =
         spotService.findSpotBy(
                 latitude = parkAttempt.latitude,
                 longitude = parkAttempt.longitude)

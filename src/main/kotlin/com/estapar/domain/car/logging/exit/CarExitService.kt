@@ -4,6 +4,7 @@ import com.estapar.domain.car.billing.BillingService
 import com.estapar.domain.car.logging.GarageLoggingService
 import com.estapar.domain.car.logging.NotFoundGarageLoggingException
 import com.estapar.domain.car.park.ParkingService
+import org.springframework.transaction.annotation.Transactional
 import reactor.core.publisher.Mono
 
 open class CarExitService(
@@ -12,7 +13,8 @@ open class CarExitService(
     val billingService: BillingService
 ) {
 
-    fun logExit(carExit: CarExit): Mono<Void> =
+    @Transactional
+    open fun logExit(carExit: CarExit): Mono<Void> =
         garageLoggingService.findActiveGarageLoggingBy(licensePlate = carExit.licensePlate)
             .flatMap { garageLogging ->
                 Mono.zip(
