@@ -50,7 +50,7 @@ class GarageServiceTest(
             name = "A",
             basePrice = BigDecimal.valueOf(12.3),
             openHour = LocalTime.of(9, 0),
-            closeHour = LocalTime.of(8, 30),
+            closedHour = LocalTime.of(8, 30),
             durationLimitMinutes = 40,
             maxCapacity = 100)
         `when`(externalRepository.loadGarageFirstTime())
@@ -69,7 +69,7 @@ class GarageServiceTest(
             name = "A",
             basePrice = BigDecimal.valueOf(12.3),
             openHour = LocalTime.of(9, 0),
-            closeHour = LocalTime.of(8, 30),
+            closedHour = LocalTime.of(8, 30),
             durationLimitMinutes = 40,
             maxCapacity = 100)
         `when`(externalRepository.loadGarageFirstTime())
@@ -89,14 +89,14 @@ class GarageServiceTest(
             name = "A",
             basePrice = BigDecimal.valueOf(12.3),
             openHour = LocalTime.of(9, 0),
-            closeHour = LocalTime.of(8, 30),
+            closedHour = LocalTime.of(8, 30),
             durationLimitMinutes = 40,
             maxCapacity = 100)
         val sector2 = Sector(
             name = "A",
             basePrice = BigDecimal.valueOf(12.3),
             openHour = LocalTime.of(9, 0),
-            closeHour = LocalTime.of(8, 30),
+            closedHour = LocalTime.of(8, 30),
             durationLimitMinutes = 40,
             maxCapacity = 100)
         `when`(externalRepository.loadGarageFirstTime())
@@ -115,7 +115,7 @@ class GarageServiceTest(
             name = "A",
             basePrice = BigDecimal.valueOf(12.3),
             openHour = LocalTime.of(9, 0),
-            closeHour = LocalTime.of(8, 30),
+            closedHour = LocalTime.of(8, 30),
             durationLimitMinutes = 40,
             maxCapacity = 100)
         val spot = Spot(

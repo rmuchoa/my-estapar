@@ -51,7 +51,7 @@ class SpotRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         val spot = Spot(
             sector = sector,
             latitude = 39.22,
@@ -76,7 +76,7 @@ class SpotRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         val spot = Spot(
             sector = sector,
             latitude = 39.22,
@@ -109,7 +109,7 @@ class SpotRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         val spot = Spot(
             sector = sector,
             latitude = 39.22,

@@ -19,7 +19,7 @@ data class GarageSectorDTO(
             basePrice = basePrice,
             maxCapacity =  maxCapacity,
             openHour = openHour,
-            closeHour = closeHour,
+            closedHour = closeHour,
             durationLimitMinutes = durationLimitMinutes)
     }
 }

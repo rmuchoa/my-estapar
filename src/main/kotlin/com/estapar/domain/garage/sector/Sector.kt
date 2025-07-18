@@ -16,7 +16,7 @@ data class Sector(
     val basePrice: BigDecimal,
     val maxCapacity: Int,
     val openHour: LocalTime,
-    val closeHour: LocalTime,
+    val closedHour: LocalTime,
     val durationLimitMinutes: Int,
     val status: SectorStatus = SectorStatus.OPENED,
     val spots: List<Spot> = emptyList()) {
@@ -25,7 +25,7 @@ data class Sector(
         spots.filter { spot -> spot.occupied }
 
     fun isClosedFor(parkingTime: LocalTime): Boolean =
-        parkingTime.isBefore(openHour) && parkingTime.isAfter(closeHour)
+        parkingTime.isBefore(openHour) && parkingTime.isAfter(closedHour)
 
     fun hasReachedDurationLimit(duration: Duration): Boolean =
         duration.inWholeMinutes > durationLimitMinutes

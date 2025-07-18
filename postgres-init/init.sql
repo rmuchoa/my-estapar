@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS garage_sector (
     max_capacity INTEGER NOT NULL,
     duration_limit_minutes INTEGER NOT NULL,
     open_hour TIME NOT NULL,
-    close_hour TIME NOT NULL,
+    closed_hour TIME NOT NULL,
     status TEXT NOT NULL
 );
 

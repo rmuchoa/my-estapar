@@ -52,7 +52,7 @@ class SectorRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
         StepVerifier.create(adapter.save(sector))
@@ -71,7 +71,7 @@ class SectorRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
         StepVerifier.create(adapter.save(sector))
@@ -86,7 +86,7 @@ class SectorRepositoryAdapterTest(
             hasProperty("maxCapacity", equalTo(sector.maxCapacity)),
             hasProperty("durationLimitMinutes", equalTo(sector.durationLimitMinutes)),
             hasProperty("openHour", equalTo(sector.openHour)),
-            hasProperty("closeHour", equalTo(sector.closeHour))
+            hasProperty("closeHour", equalTo(sector.closedHour))
         ))
     }
 
@@ -101,7 +101,7 @@ class SectorRepositoryAdapterTest(
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour)
+            closedHour = closeHour)
         val entity = GarageSectorEntity(
             id = 2,
             name = sector.name,
@@ -109,7 +109,7 @@ class SectorRepositoryAdapterTest(
             maxCapacity = sector.maxCapacity,
             durationLimitMinutes = sector.durationLimitMinutes,
             openHour = sector.openHour,
-            closeHour = sector.closeHour
+            closedHour = sector.closedHour
         )
         val spotEntity = GarageSpotEntity(
             id = 2,
@@ -130,7 +130,7 @@ class SectorRepositoryAdapterTest(
                     hasProperty("maxCapacity", equalTo(entity.maxCapacity)),
                     hasProperty("durationLimitMinutes", equalTo(entity.durationLimitMinutes)),
                     hasProperty("openHour", equalTo(entity.openHour)),
-                    hasProperty("closeHour", equalTo(entity.closeHour)),
+                    hasProperty("closeHour", equalTo(entity.closedHour)),
                     hasProperty("status", equalTo(SectorStatus.CLOSED))
                 ))
             }

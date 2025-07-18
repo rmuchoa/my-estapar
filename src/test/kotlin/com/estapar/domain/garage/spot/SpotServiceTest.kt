@@ -38,7 +38,7 @@ class SpotServiceTest {
     fun shouldAskSpotRepositoryToSaveSpotWhenSavingSpot() {
         val openHour = LocalTime.of(10, 0)
         val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closeHour = closeHour)
+        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closedHour = closeHour)
         val spot = Spot(sector = sector, latitude = 39.22, longitude = 45.23, occupied = true)
         `when`(repository.save(spot = any())).thenReturn(Mono.empty())
 
@@ -58,7 +58,7 @@ class SpotServiceTest {
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour
+            closedHour = closeHour
         )
         val spot1 = Spot(
             sector = sector,
@@ -88,7 +88,7 @@ class SpotServiceTest {
             maxCapacity = 100,
             durationLimitMinutes = 10,
             openHour = openHour,
-            closeHour = closeHour
+            closedHour = closeHour
         )
         val spot = Spot(
             sector = sector,

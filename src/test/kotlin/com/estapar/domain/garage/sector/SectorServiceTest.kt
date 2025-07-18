@@ -38,7 +38,7 @@ class SectorServiceTest(
     fun shouldAskSectorRepositoryToSaveSectorWhenSavingSector() {
         val openHour = LocalTime.of(10, 0)
         val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closeHour = closeHour)
+        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closedHour = closeHour)
         `when`(repository.save(sector = any())).thenReturn(Mono.empty())
 
         StepVerifier.create(service.saveSectors(listOf(sector)))
@@ -51,8 +51,8 @@ class SectorServiceTest(
     fun shouldAskTwiceSectorRepositoryToSaveSectorWhenSavingTwoSectors() {
         val openHour = LocalTime.of(10, 0)
         val closeHour = LocalTime.of(22, 15)
-        val sector1 = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closeHour = closeHour)
-        val sector2 = Sector(name = "B", basePrice = BigDecimal.valueOf(14.5), maxCapacity = 30, durationLimitMinutes = 155, openHour = openHour, closeHour = closeHour)
+        val sector1 = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closedHour = closeHour)
+        val sector2 = Sector(name = "B", basePrice = BigDecimal.valueOf(14.5), maxCapacity = 30, durationLimitMinutes = 155, openHour = openHour, closedHour = closeHour)
         `when`(repository.save(sector = any())).thenReturn(Mono.empty())
 
         StepVerifier.create(service.saveSectors(listOf(sector1, sector2)))
@@ -65,7 +65,7 @@ class SectorServiceTest(
     fun shouldReturnSavedSectorFromRepositoryWhenSavingSector() {
         val openHour = LocalTime.of(10, 0)
         val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closeHour = closeHour)
+        val sector = Sector(name = "A", basePrice = BigDecimal.valueOf(20.0), maxCapacity = 100, durationLimitMinutes = 10, openHour = openHour, closedHour = closeHour)
         `when`(repository.save(sector = any())).thenReturn(Mono.just(sector))
 
         StepVerifier.create(service.saveSectors(listOf(sector)))
@@ -75,7 +75,7 @@ class SectorServiceTest(
                     hasProperty("name", equalTo(sector.name)),
                     hasProperty("basePrice", equalTo(sector.basePrice)),
                     hasProperty("openHour", equalTo(sector.openHour)),
-                    hasProperty("closeHour", equalTo(sector.closeHour)),
+                    hasProperty("closeHour", equalTo(sector.closedHour)),
                     hasProperty("maxCapacity", equalTo(sector.maxCapacity)),
                     hasProperty("durationLimitMinutes", equalTo(sector.durationLimitMinutes))
                 ))

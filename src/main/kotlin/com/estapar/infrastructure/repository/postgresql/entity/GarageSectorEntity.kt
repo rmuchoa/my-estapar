@@ -15,7 +15,7 @@ data class GarageSectorEntity(
     @Column("base_price") val basePrice: BigDecimal,
     @Column("max_capacity") val maxCapacity: Int,
     @Column("open_hour") val openHour: LocalTime,
-    @Column("close_hour") val closeHour: LocalTime,
+    @Column("closed_hour") val closedHour: LocalTime,
     @Column("duration_limit_minutes") val durationLimitMinutes: Int,
     @Column("status") val status: String = SectorStatus.CLOSED.name
 ) {
@@ -27,7 +27,7 @@ data class GarageSectorEntity(
             basePrice = basePrice,
             maxCapacity = maxCapacity,
             openHour = openHour,
-            closeHour =  closeHour,
+            closedHour =  closedHour,
             durationLimitMinutes = durationLimitMinutes,
             status = SectorStatus.of(status))
 
@@ -39,7 +39,7 @@ data class GarageSectorEntity(
                 basePrice = sector.basePrice,
                 maxCapacity = sector.maxCapacity,
                 openHour = sector.openHour,
-                closeHour =  sector.closeHour,
+                closedHour =  sector.closedHour,
                 durationLimitMinutes = sector.durationLimitMinutes,
                 status = sector.status.name)
     }
