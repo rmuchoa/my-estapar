@@ -29,10 +29,11 @@ import java.math.BigDecimal
 import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
-class SectorRepositoryAdapterTest {
+class SectorRepositoryAdapterTest(
+    @Mock private val repository: JPAGarageSectorRepository,
+    @Mock private val spotRepository: JPAGarageSpotRepository
+) {
 
-    @Mock private lateinit var repository: JPAGarageSectorRepository
-    @Mock private lateinit var spotRepository: JPAGarageSpotRepository
     private val sectorCaptor = argumentCaptor<GarageSectorEntity>()
     private lateinit var adapter: SectorRepositoryAdapter
 

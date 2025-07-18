@@ -31,9 +31,10 @@ import java.math.BigDecimal
 import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
-class GarageExternalRepositoryAdapterTest {
+class GarageExternalRepositoryAdapterTest(
+    @Mock private val webClient: GarageWebClient
+) {
 
-    @Mock private lateinit var webClient: GarageWebClient
     private lateinit var repositoryAdapter: GarageExternalRepositoryAdapter
 
     @BeforeEach

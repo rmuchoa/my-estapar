@@ -22,9 +22,10 @@ import java.math.BigDecimal
 import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
-class SectorServiceTest {
+class SectorServiceTest(
+    @Mock private val repository: SectorRepository
+) {
 
-    @Mock private lateinit var repository: SectorRepository
     private val sectorCaptor = argumentCaptor<Sector>()
     private lateinit var service: SectorService
 

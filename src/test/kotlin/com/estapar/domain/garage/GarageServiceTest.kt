@@ -21,11 +21,12 @@ import java.math.BigDecimal
 import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
-class GarageServiceTest {
+class GarageServiceTest(
+    @Mock private val externalRepository: GarageExternalRepository,
+    @Mock private val sectorService: SectorService,
+    @Mock private val spotService: SpotService
+) {
 
-    @Mock private lateinit var externalRepository: GarageExternalRepository
-    @Mock private lateinit var sectorService: SectorService
-    @Mock private lateinit var spotService: SpotService
     private lateinit var service: GarageService
 
     @BeforeEach
