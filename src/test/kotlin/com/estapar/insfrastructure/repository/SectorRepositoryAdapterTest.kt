@@ -1,5 +1,6 @@
 package com.estapar.insfrastructure.repository
 
+import com.estapar.AbstractEstaparTest
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.sector.SectorStatus
 import com.estapar.infrastructure.repository.SectorRepositoryAdapter
@@ -32,7 +33,7 @@ import java.time.LocalTime
 class SectorRepositoryAdapterTest(
     @Mock private val repository: JPAGarageSectorRepository,
     @Mock private val spotRepository: JPAGarageSpotRepository
-) {
+) : AbstractEstaparTest() {
 
     private val sectorCaptor = argumentCaptor<GarageSectorEntity>()
     private lateinit var adapter: SectorRepositoryAdapter
@@ -44,80 +45,39 @@ class SectorRepositoryAdapterTest(
 
     @Test
     fun shouldAskRepositoryToSaveSectorWhenSavingSector() {
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
+        val sector = buildSomeSector()
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
-        StepVerifier.create(adapter.save(sector))
-            .verifyComplete()
+        StepVerifier.create(adapter.save(sector)).verifyComplete()
 
         verify(repository, atLeastOnce()).save(any())
     }
 
     @Test
     fun shouldConvertAndSendSectorToSaveOnRepositoryWhenSavingSector() {
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
+        val sector = buildSomeSector()
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
-        StepVerifier.create(adapter.save(sector))
-            .verifyComplete()
+        StepVerifier.create(adapter.save(sector)).verifyComplete()
 
         verify(repository, atLeastOnce()).save(sectorCaptor.capture())
         assertThat(sectorCaptor.firstValue, allOf(
             instanceOf(GarageSectorEntity::class.java),
-            hasProperty("id", nullValue()),
+            hasProperty("id", equalTo(sector.id)),
             hasProperty("name", equalTo(sector.name)),
             hasProperty("basePrice", equalTo(sector.basePrice)),
             hasProperty("maxCapacity", equalTo(sector.maxCapacity)),
             hasProperty("durationLimitMinutes", equalTo(sector.durationLimitMinutes)),
             hasProperty("openHour", equalTo(sector.openHour)),
-            hasProperty("closeHour", equalTo(sector.closedHour))
+            hasProperty("closedHour", equalTo(sector.closedHour))
         ))
     }
 
     @Test
     fun shouldConvertAndReturnReceivedResponseWhenSavingSector() {
         val sectorId = 3L
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
-        val entity = GarageSectorEntity(
-            id = 2,
-            name = sector.name,
-            basePrice = sector.basePrice,
-            maxCapacity = sector.maxCapacity,
-            durationLimitMinutes = sector.durationLimitMinutes,
-            openHour = sector.openHour,
-            closedHour = sector.closedHour
-        )
-        val spotEntity = GarageSpotEntity(
-            id = 2,
-            sectorId = sector.id,
-            latitude = 20.23,
-            longitude = 45.32,
-            occupied = false
-        )
+        val sector = buildSomeSector()
+        val entity = buildSomeGarageSectorEntity(id = sectorId, sector = sector)
         `when`(repository.save(any())).thenReturn(Mono.just(entity.copy(id = sectorId)))
 
         StepVerifier.create(adapter.save(sector))
@@ -130,7 +90,7 @@ class SectorRepositoryAdapterTest(
                     hasProperty("maxCapacity", equalTo(entity.maxCapacity)),
                     hasProperty("durationLimitMinutes", equalTo(entity.durationLimitMinutes)),
                     hasProperty("openHour", equalTo(entity.openHour)),
-                    hasProperty("closeHour", equalTo(entity.closedHour)),
+                    hasProperty("closedHour", equalTo(entity.closedHour)),
                     hasProperty("status", equalTo(SectorStatus.CLOSED))
                 ))
             }

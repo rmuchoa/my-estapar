@@ -1,5 +1,6 @@
 package com.estapar.insfrastructure.repository
 
+import com.estapar.AbstractEstaparTest
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.spot.Spot
 import com.estapar.infrastructure.repository.SectorRepositoryAdapter
@@ -11,7 +12,6 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasProperty
 import org.hamcrest.Matchers.instanceOf
-import org.hamcrest.Matchers.nullValue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,14 +24,12 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
-import java.math.BigDecimal
-import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
 class SpotRepositoryAdapterTest(
     @Mock private val repository: JPAGarageSpotRepository,
     @Mock private val sectorRepository: SectorRepositoryAdapter
-) {
+) : AbstractEstaparTest() {
 
     private val spotCaptor = argumentCaptor<GarageSpotEntity>()
     private lateinit var adapter: SpotRepositoryAdapter
@@ -43,20 +41,7 @@ class SpotRepositoryAdapterTest(
 
     @Test
     fun shouldAskRepositoryToSaveSpotWhenSavingSpot() {
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
-        val spot = Spot(
-            sector = sector,
-            latitude = 39.22,
-            longitude = 45.23,
-            occupied = true)
+        val spot = buildSomeSpot()
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
         StepVerifier.create(adapter.save(spot))
@@ -67,21 +52,8 @@ class SpotRepositoryAdapterTest(
 
     @Test
     fun shouldConvertAndSendSpotToSaveOnRepositoryWhenSavingSpot() {
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            id = 1,
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
-        val spot = Spot(
-            sector = sector,
-            latitude = 39.22,
-            longitude = 45.23,
-            occupied = true)
+        val sector = buildSomeSector()
+        val spot = buildSomeSpot(sector = sector)
         `when`(repository.save(any())).thenReturn(Mono.empty())
 
         StepVerifier.create(adapter.save(spot))
@@ -90,7 +62,7 @@ class SpotRepositoryAdapterTest(
         verify(repository, atLeastOnce()).save(spotCaptor.capture())
         assertThat(spotCaptor.firstValue, allOf(
             instanceOf(GarageSpotEntity::class.java),
-            hasProperty("id", nullValue()),
+            hasProperty("id", equalTo(spot.id)),
             hasProperty("sectorId", equalTo(sector.id)),
             hasProperty("latitude", equalTo(spot.latitude)),
             hasProperty("longitude", equalTo(spot.longitude)),
@@ -100,28 +72,8 @@ class SpotRepositoryAdapterTest(
 
     @Test
     fun shouldConvertAndReturnReceivedResponseWhenSavingSpot() {
-        val openHour = LocalTime.of(10, 0)
-        val closeHour = LocalTime.of(22, 15)
-        val sector = Sector(
-            id = 1,
-            name = "A",
-            basePrice = BigDecimal.valueOf(20.0),
-            maxCapacity = 100,
-            durationLimitMinutes = 10,
-            openHour = openHour,
-            closedHour = closeHour)
-        val spot = Spot(
-            sector = sector,
-            latitude = 39.22,
-            longitude = 45.23,
-            occupied = true)
-        val entity = GarageSpotEntity(
-            id = 2,
-            sectorId = sector.id,
-            latitude = spot.latitude,
-            longitude = spot.longitude,
-            occupied = spot.occupied
-        )
+        val spot = buildSomeSpot()
+        val entity = buildSomeGarageSpotEntity(spot = spot)
         `when`(repository.save(any())).thenReturn(Mono.just(entity))
 
         StepVerifier.create(adapter.save(spot))
