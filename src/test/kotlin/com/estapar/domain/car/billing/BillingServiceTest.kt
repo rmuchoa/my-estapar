@@ -1,21 +1,37 @@
 package com.estapar.domain.car.billing
 
-import com.estapar.domain.car.logging.GarageLogging
-import com.estapar.domain.car.park.Parking
-import com.estapar.domain.garage.sector.Sector
-import com.estapar.domain.garage.spot.Spot
+import com.estapar.AbstractEstaparTest
+import com.estapar.SECTOR_NAME
+import com.estapar.domain.revenue.RevenueBilling
+import com.estapar.domain.revenue.RevenueFilter
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.hasProperty
+import org.hamcrest.Matchers.instanceOf
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
+import org.mockito.Mockito.atLeastOnce
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import reactor.test.StepVerifier
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 @ExtendWith(MockitoExtension::class)
-class BillingServiceTest(@Mock private val repository: BillingRepository) {
+class BillingServiceTest(
+    @Mock private val repository: BillingRepository
+) : AbstractEstaparTest() {
 
+    private val billingCaptor = argumentCaptor<Billing>()
+    private val filterCaptor = argumentCaptor<RevenueFilter>()
     private lateinit var service: BillingService
 
     @BeforeEach
@@ -24,14 +40,144 @@ class BillingServiceTest(@Mock private val repository: BillingRepository) {
     }
 
     @Test
-    fun shouldAskRepositoryToSaveBillingWhenChargingParking() {
-        val sector = Sector(id = 1, name = "A", basePrice = BigDecimal.TEN, maxCapacity = 20,
-            openHour = LocalTime.of(9,0), closedHour = LocalTime.of(20,0), durationLimitMinutes = 30)
-        val spot = Spot(id = 2, sector = sector, latitude = 10.234, longitude = 32.451, occupied = false)
-        val garageLogging = GarageLogging(id = 3, licensePlate = "ZUL0001", entryTime = LocalDateTime.now())
-        val parking = Parking(id = 4, spot = spot, licensePlate = "ZUL0001")
+    fun shouldAskRepositoryToSaveBillingWhenChargeParking() {
+        val parking = buildSomeParking()
+        val garageLogging = buildSomeGarageLogging()
+        `when`(repository.saveBilling(billing = any())).thenReturn(Mono.empty())
 
-        service.chargeParking(garageLogging, parking)
+        StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
+            .verifyComplete()
+
+        verify(repository, atLeastOnce()).saveBilling(billing = any())
+    }
+
+    @Test
+    fun shouldSaveBillingWithZeroChargeAmountWhenChargeParkingBeforeFifteenMinutes() {
+        val licensePlate = "ZUL0002"
+        val parking = buildSomeParking()
+        val garageLogging = buildGarageLoggingWithTimeRangeInMinutes(minutes = 12, licensePlate = licensePlate)
+        `when`(repository.saveBilling(billing = any())).thenReturn(Mono.empty())
+
+        StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
+            .verifyComplete()
+
+        verify(repository, atLeastOnce()).saveBilling(billing = billingCaptor.capture())
+
+        assertThat(billingCaptor.firstValue,allOf(
+            instanceOf(Billing::class.java),
+            hasProperty("parking", equalTo(parking)),
+            hasProperty("garageLogging", equalTo(garageLogging)),
+            hasProperty("licensePlate", equalTo(licensePlate)),
+            hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
+            hasProperty("chargedAmount", equalTo(BigDecimal.ZERO))
+        ))
+    }
+
+    @Test
+    fun shouldSaveBillingWithChargeAmountFromSectorBasePriceWhenChargeParkingAfterFifteenMinutesButBeforeOneHour() {
+        val sector = buildSomeSector(basePrice = BigDecimal.TEN)
+        val parking = buildSomeParking(spot = buildSomeSpot(sector = sector))
+        val garageLogging = buildGarageLoggingWithTimeRangeInMinutes(minutes = 20)
+        `when`(repository.saveBilling(billing = any())).thenReturn(Mono.empty())
+
+        StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
+            .verifyComplete()
+
+        verify(repository, atLeastOnce()).saveBilling(billing = billingCaptor.capture())
+
+        assertThat(billingCaptor.firstValue,allOf(
+            instanceOf(Billing::class.java),
+            hasProperty("parking", equalTo(parking)),
+            hasProperty("garageLogging", equalTo(garageLogging)),
+            hasProperty("licensePlate", equalTo(garageLogging.licensePlate)),
+            hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
+            hasProperty("chargedAmount", equalTo(sector.basePrice))
+        ))
+    }
+
+    @Test
+    fun shouldSaveBillingWithChargeAmountFromSectorBasePricePlusDiscountedAmountWhenChargeParkingAfterOneHourAndPlusMoreOneHour() {
+        val parking = buildSomeParking(spot = buildSomeSpot(sector = buildSomeSector(basePrice = BigDecimal.TEN)))
+        val garageLogging = buildGarageLoggingWithTimeRangeInHours(hours = 2)
+        `when`(repository.saveBilling(billing = any())).thenReturn(Mono.empty())
+
+        StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
+            .verifyComplete()
+
+        verify(repository, atLeastOnce()).saveBilling(billing = billingCaptor.capture())
+
+        assertThat(billingCaptor.firstValue,allOf(
+            instanceOf(Billing::class.java),
+            hasProperty("parking", equalTo(parking)),
+            hasProperty("garageLogging", equalTo(garageLogging)),
+            hasProperty("licensePlate", equalTo(garageLogging.licensePlate)),
+            hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
+            hasProperty("chargedAmount", equalTo(BigDecimal.valueOf(21.0).setScale(3)))
+        ))
+    }
+
+    @Test
+    fun shouldReturnSavedBillingWhenChargeParking() {
+        val licensePlate = "ZUL0002"
+        val billingTime = LocalDateTime.now()
+        val chargedAmount = BigDecimal.TEN
+        val parking = buildSomeParking()
+        val garageLogging = buildSomeGarageLogging(licensePlate = licensePlate)
+        val billing = buildSomeBilling(
+            garageLogging = garageLogging,
+            licensePlate = licensePlate,
+            billingTime = billingTime,
+            chargedAmount = chargedAmount)
+        `when`(repository.saveBilling(billing = any())).thenReturn(Mono.just(billing))
+
+        StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
+            .assertNext { billing ->
+                assertThat(billing,allOf(
+                    instanceOf(Billing::class.java),
+                    hasProperty("parking", equalTo(parking)),
+                    hasProperty("garageLogging", equalTo(garageLogging)),
+                    hasProperty("licensePlate", equalTo(licensePlate)),
+                    hasProperty("billingTime", equalTo(billingTime)),
+                    hasProperty("chargedAmount", equalTo(chargedAmount))
+                ))
+            }
+            .verifyComplete()
+    }
+
+    @Test
+    fun shouldAskRepositoryToSearchBillingsByFilterWhenSearchingBillingsByFilter() {
+        val filter = buildSomeRevenueFilter()
+        `when`(repository.searchBillingsBy(filter = any())).thenReturn(Flux.empty())
+
+        StepVerifier.create(service.searchBillingsBy(filter = filter)).verifyComplete()
+
+        verify(repository, atLeastOnce()).searchBillingsBy(filter = filterCaptor.capture())
+
+        assertThat(filterCaptor.firstValue, allOf(
+            equalTo(filter),
+            instanceOf(RevenueFilter::class.java),
+            hasProperty("date", equalTo(filter.date)),
+            hasProperty("sectorName", equalTo(SECTOR_NAME))
+        ))
+    }
+
+    @Test
+    fun shouldReturnBillingWhenSearchingBillingsByFilter() {
+        val filter = buildSomeRevenueFilter()
+        val billing = buildSomeRevenueBilling()
+        `when`(repository.searchBillingsBy(filter = any())).thenReturn(Flux.fromIterable(listOf(billing)))
+
+        StepVerifier.create(service.searchBillingsBy(filter = filter))
+            .assertNext { billing ->
+                assertThat(billing,allOf(
+                    instanceOf(RevenueBilling::class.java),
+                    hasProperty("licensePlate", equalTo(billing.licensePlate)),
+                    hasProperty("billingTime", equalTo(billing.billingTime)),
+                    hasProperty("chargedAmount", equalTo(billing.chargedAmount))
+                ))
+            }
+            .verifyComplete()
+
     }
 
 }

@@ -21,12 +21,13 @@ open class CarExitService(
                     garageLoggingService.logExit(garageLogging = garageLogging, carExit = carExit),
                     parkingService.findEnteredBy(licensePlate = carExit.licensePlate)
                         .flatMap { parking -> parkingService.unparkCarFromSpot(parking) }
-                ).map { it.t1 to it.t2 }
-            }
-            .flatMap { (garageLogging, parking) ->
-                billingService.chargeParking(
-                    garageLogging = garageLogging,
-                    parking = parking)
+                )
+                    .map { it.t1 to it.t2 }
+                    .flatMap { (garageLogging, parking) ->
+                        billingService.chargeParking(
+                            garageLogging = garageLogging,
+                            parking = parking)
+                    }
             }
             .switchIfEmpty(Mono.error {
                 NotFoundGarageLoggingException(
