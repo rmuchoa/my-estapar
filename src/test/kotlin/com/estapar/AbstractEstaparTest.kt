@@ -5,6 +5,7 @@ import com.estapar.domain.car.logging.GarageLogging
 import com.estapar.domain.car.logging.entry.CarEntry
 import com.estapar.domain.car.logging.exit.CarExit
 import com.estapar.domain.car.park.Parking
+import com.estapar.domain.car.park.attempt.ParkAttempt
 import com.estapar.domain.garage.sector.Sector
 import com.estapar.domain.garage.spot.Spot
 import com.estapar.domain.revenue.RevenueBilling
@@ -34,7 +35,8 @@ abstract class AbstractEstaparTest {
         maxCapacity: Int = 20,
         durationLimitMinutes: Int = 30,
         openHour: LocalTime = LocalTime.of(9,0),
-        closedHour: LocalTime = LocalTime.of(20,0)
+        closedHour: LocalTime = LocalTime.of(20,0),
+        spots: List<Spot> = listOf()
     ): Sector =
         Sector(
             id = id,
@@ -43,7 +45,8 @@ abstract class AbstractEstaparTest {
             maxCapacity = maxCapacity,
             durationLimitMinutes = durationLimitMinutes,
             openHour = openHour,
-            closedHour = closedHour)
+            closedHour = closedHour,
+            spots = spots)
 
     fun buildSomeSpot(
         id: Long = 2,
@@ -59,15 +62,47 @@ abstract class AbstractEstaparTest {
             longitude = longitude,
             occupied = occupied)
 
+    fun buildSomeParkAttempt(
+        licensePlate: String = LICENSE_PLATE,
+        latitude: Double = 20.34,
+        longitude: Double = 31.53
+    ): ParkAttempt =
+        ParkAttempt(
+            licensePlate = licensePlate,
+            latitude = latitude,
+            longitude = longitude)
+
     fun buildSomeParking(
         id: Long = 3,
         spot: Spot = buildSomeSpot(),
-        licensePlate: String = LICENSE_PLATE
+        licensePlate: String = LICENSE_PLATE,
+        unparkingTime: LocalDateTime? = null
     ): Parking =
         Parking(
             id = id,
             spot = spot,
-            licensePlate = licensePlate)
+            licensePlate = licensePlate,
+            unparkingTime = unparkingTime)
+
+    fun buildVacantAvailableParking(
+        occupied: Boolean = false,
+        openedTime: LocalTime = LocalTime.now().minusHours(4),
+        closedTime: LocalTime = LocalTime.now().minusHours(3)
+    ): Parking =
+        buildSomeParking(
+            spot = buildSomeSpot(
+                occupied = occupied,
+                sector = buildSomeSector(
+                    openHour = openedTime,
+                    closedHour = closedTime)))
+
+    fun buildOutOfCapacityParking(
+        maxCapacity: Int = 1,
+        sector: Sector = buildSomeSector(maxCapacity = maxCapacity)
+    ): Parking {
+        sector.spots.plus(buildSomeSpot())
+        return buildSomeParking(spot = buildSomeSpot(sector = sector))
+    }
 
     fun buildSomeGarageLogging(
         id: Long = 4,

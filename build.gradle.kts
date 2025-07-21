@@ -43,6 +43,7 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 	testImplementation("org.hamcrest:hamcrest:2.2")
+	testImplementation(kotlin("test"))
 }
 
 kotlin {

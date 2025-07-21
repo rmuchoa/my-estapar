@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 
 open class ParkAttemptService(
     val spotService: SpotService,
-    val parkingService: ParkingService,
+    val parkingService: ParkingService
 ) {
 
     @Transactional
@@ -17,7 +17,7 @@ open class ParkAttemptService(
                 latitude = parkAttempt.latitude,
                 longitude = parkAttempt.longitude)
             .map { spot ->
-                Parking.Companion.of(
+                Parking.of(
                     parkAttempt = parkAttempt,
                     spot = spot)
             }

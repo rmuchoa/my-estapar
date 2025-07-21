@@ -81,7 +81,8 @@ open class ParkingService(
         Mono.just(parking)
             .filter { parking -> parking.hasReachedSectorMaxCapacity() }
             .switchIfEmpty(
-                sectorService.reopenSectorOperation(sector = parking.spot.sector!!)
+                Mono.just(parking.spot.sector!!)
+                    .flatMap { sector -> sectorService.reopenSectorOperation(sector = sector) }
                     .map { parking })
 
 }

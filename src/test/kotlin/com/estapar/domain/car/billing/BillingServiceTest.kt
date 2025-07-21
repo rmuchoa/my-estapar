@@ -24,6 +24,9 @@ import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import kotlin.test.DefaultAsserter.assertEquals
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @ExtendWith(MockitoExtension::class)
 class BillingServiceTest(
@@ -40,7 +43,7 @@ class BillingServiceTest(
     }
 
     @Test
-    fun shouldAskRepositoryToSaveBillingWhenChargeParking() {
+        fun shouldAskRepositoryToSaveBillingWhenChargeParking() {
         val parking = buildSomeParking()
         val garageLogging = buildSomeGarageLogging()
         `when`(repository.saveBilling(billing = any())).thenReturn(Mono.empty())
@@ -71,6 +74,8 @@ class BillingServiceTest(
             hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
             hasProperty("chargedAmount", equalTo(BigDecimal.ZERO))
         ))
+
+        assertEquals(actual = billingCaptor.firstValue.billingDuration.inWholeMinutes, expected = 12.toDuration(DurationUnit.MINUTES).inWholeMinutes, message = "Wasn't equal")
     }
 
     @Test
@@ -93,6 +98,8 @@ class BillingServiceTest(
             hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
             hasProperty("chargedAmount", equalTo(sector.basePrice))
         ))
+
+        assertEquals(actual = billingCaptor.firstValue.billingDuration.inWholeMinutes, expected = 20.toDuration(DurationUnit.MINUTES).inWholeMinutes, message = "Wasn't equal")
     }
 
     @Test
@@ -114,6 +121,8 @@ class BillingServiceTest(
             hasProperty("billingTime", instanceOf<LocalDateTime>(LocalDateTime::class.java)),
             hasProperty("chargedAmount", equalTo(BigDecimal.valueOf(21.0).setScale(3)))
         ))
+
+        assertEquals(actual = billingCaptor.firstValue.billingDuration.inWholeHours, expected = 2.toDuration(DurationUnit.HOURS).inWholeHours, message = "Wasn't equal")
     }
 
     @Test
@@ -131,8 +140,8 @@ class BillingServiceTest(
         `when`(repository.saveBilling(billing = any())).thenReturn(Mono.just(billing))
 
         StepVerifier.create(service.chargeParking(garageLogging = garageLogging, parking = parking))
-            .assertNext { billing ->
-                assertThat(billing,allOf(
+            .assertNext { returnedBilling ->
+                assertThat(returnedBilling,allOf(
                     instanceOf(Billing::class.java),
                     hasProperty("parking", equalTo(parking)),
                     hasProperty("garageLogging", equalTo(garageLogging)),
@@ -140,6 +149,8 @@ class BillingServiceTest(
                     hasProperty("billingTime", equalTo(billingTime)),
                     hasProperty("chargedAmount", equalTo(chargedAmount))
                 ))
+
+                assertEquals(actual = returnedBilling.billingDuration.inWholeMinutes, expected = billing.billingDuration.inWholeMinutes, message = "Wasn't equal")
             }
             .verifyComplete()
     }
@@ -168,13 +179,15 @@ class BillingServiceTest(
         `when`(repository.searchBillingsBy(filter = any())).thenReturn(Flux.fromIterable(listOf(billing)))
 
         StepVerifier.create(service.searchBillingsBy(filter = filter))
-            .assertNext { billing ->
-                assertThat(billing,allOf(
+            .assertNext { returnedBilling ->
+                assertThat(returnedBilling,allOf(
                     instanceOf(RevenueBilling::class.java),
-                    hasProperty("licensePlate", equalTo(billing.licensePlate)),
-                    hasProperty("billingTime", equalTo(billing.billingTime)),
-                    hasProperty("chargedAmount", equalTo(billing.chargedAmount))
+                    hasProperty("licensePlate", equalTo(returnedBilling.licensePlate)),
+                    hasProperty("billingTime", equalTo(returnedBilling.billingTime)),
+                    hasProperty("chargedAmount", equalTo(returnedBilling.chargedAmount))
                 ))
+
+                assertEquals(actual = returnedBilling.billingDuration, expected = billing.billingDuration, message = "Wasn't equal")
             }
             .verifyComplete()
 

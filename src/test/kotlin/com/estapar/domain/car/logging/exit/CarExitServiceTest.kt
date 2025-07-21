@@ -89,4 +89,52 @@ class CarExitServiceTest(
             carExit = eq(carExit))
     }
 
+    @Test
+    fun shouldAskParkingServiceToFindEnteredParkingByLicensePlateWhenFindSomeActiveGarageLoggingOnLoggingExit() {
+        val licensePlate = "ZUL0002"
+        val carExit = buildSomeCarExit(licensePlate = licensePlate)
+        val garageLogging = buildSomeGarageLogging()
+        val parking = buildSomeParking()
+        val billing = buildSomeBilling(garageLogging = garageLogging)
+        `when`(garageLoggingService.findActiveGarageLoggingBy(licensePlate = eq(licensePlate)))
+            .thenReturn(Mono.just(garageLogging))
+        `when`(garageLoggingService.logExit(garageLogging = eq(garageLogging), carExit = eq(carExit)))
+            .thenReturn(Mono.just(garageLogging))
+        `when`(parkingService.findEnteredBy(licensePlate = eq(licensePlate)))
+            .thenReturn(Mono.just(parking))
+        `when`(parkingService.unparkCarFromSpot(parking = eq(parking)))
+            .thenReturn(Mono.just(parking))
+        `when`(billingService.chargeParking(garageLogging = eq(garageLogging), parking = eq(parking)))
+            .thenReturn(Mono.just(billing))
+
+        StepVerifier.create(service.logExit(carExit = carExit)).verifyComplete()
+
+        verify(parkingService, atLeastOnce()).findEnteredBy(licensePlate = eq(licensePlate))
+    }
+
+    @Test
+    fun shouldAskBillingServiceToChargeParkingWhenFindSomeActiveGarageLoggingOnLoggingExit() {
+        val licensePlate = "ZUL0002"
+        val carExit = buildSomeCarExit(licensePlate = licensePlate)
+        val garageLogging = buildSomeGarageLogging()
+        val parking = buildSomeParking()
+        val billing = buildSomeBilling(garageLogging = garageLogging)
+        `when`(garageLoggingService.findActiveGarageLoggingBy(licensePlate = eq(licensePlate)))
+            .thenReturn(Mono.just(garageLogging))
+        `when`(garageLoggingService.logExit(garageLogging = eq(garageLogging), carExit = eq(carExit)))
+            .thenReturn(Mono.just(garageLogging))
+        `when`(parkingService.findEnteredBy(licensePlate = eq(licensePlate)))
+            .thenReturn(Mono.just(parking))
+        `when`(parkingService.unparkCarFromSpot(parking = eq(parking)))
+            .thenReturn(Mono.just(parking))
+        `when`(billingService.chargeParking(garageLogging = eq(garageLogging), parking = eq(parking)))
+            .thenReturn(Mono.just(billing))
+
+        StepVerifier.create(service.logExit(carExit = carExit)).verifyComplete()
+
+        verify(billingService, atLeastOnce()).chargeParking(
+            garageLogging = eq(garageLogging),
+            parking = eq(parking))
+    }
+
 }
